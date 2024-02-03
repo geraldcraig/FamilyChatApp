@@ -1,0 +1,14 @@
+[
+  {
+  "user": "u1",
+  "name": "John",
+  "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
+  "status": "Hey there!"
+},
+  {
+    "user": "u2",
+    "name": "Joe",
+    "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
+    "status": "Hey there!"
+  }
+]

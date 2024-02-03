@@ -1,9 +1,15 @@
 import {StyleSheet, Text, View} from "react-native";
 
-const ContactsScreen = () => {
+const ContactsScreen = ({ user }) => {
     return (
         <View style={styles.container}>
-            <Text>Contacts</Text>
+            <Text numberOfLines={1}>
+                {user.name}
+            </Text>
+
+            <Text numberOfLines={2}>
+                {user.status}
+            </Text>
         </View>
     );
 }

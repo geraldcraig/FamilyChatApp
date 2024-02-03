@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "user": {
+      "id": "u2",
+      "name": "Lukas",
+      "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
+      "status": "Hey there!"
+    },
+    "lastMessage": {
+      "id": "m1",
+      "text": "Well done this sprint, guys!",
+      "createdAt": "2022-10-14T13:30:00.000Z"
+    }
+  },
+  {
+    "id": "2",
+    "user": {
+      "id": "u3",
+      "name": "Daniil Top",
+      "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/1.jpg"
+    },
+    "lastMessage": {
+      "id": "m2",
+      "text": "How are you doing? Did you get any chance to look at what I've sent you?",
+      "createdAt": "2022-10-14T10:48:00.000Z"
+    }
+  }
+]

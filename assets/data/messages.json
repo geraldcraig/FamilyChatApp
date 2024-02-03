@@ -1,0 +1,20 @@
+[
+  {
+    "id": "m2",
+    "text": "I am good, good",
+    "createdAt": "2022-10-03T14:49:00.000Z",
+    "user": {
+      "id": "u2",
+      "name": "Lukas"
+    }
+  },
+  {
+    "id": "m3",
+    "text": "What about you?",
+    "createdAt": "2022-10-03T14:49:40.000Z",
+    "user": {
+      "id": "u2",
+      "name": "Lukas"
+    }
+  }
+]

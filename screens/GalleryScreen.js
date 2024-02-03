@@ -1,9 +1,15 @@
-import {StyleSheet, Text, View} from "react-native";
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View, Image } from 'react-native';
 
-const Template = () => {
+const PlaceholderImage = require('../assets/images/tom.jpg');
+
+export default function GalleryScreen() {
     return (
         <View style={styles.container}>
-            <Text>Gallery Screen</Text>
+            <View style={styles.imageContainer}>
+                <Image source={PlaceholderImage} style={styles.image} />
+            </View>
+            <StatusBar style="auto" />
         </View>
     );
 }
@@ -11,9 +17,16 @@ const Template = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
+        backgroundColor: '#25292e',
+        alignItems: 'center',
+    },
+    imageContainer: {
+        flex: 1,
+        paddingTop: 58,
+    },
+    image: {
+        width: 320,
+        height: 440,
+        borderRadius: 18,
+    },
 });
-
-export default Template;

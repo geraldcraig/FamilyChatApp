@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {Entypo, Ionicons} from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
 
 import CalendarScreen from "./screens/CalendarScreen";
 import ChatListScreen from "./screens/ChatListScreen";
@@ -12,6 +12,9 @@ import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ContactsScreen from "./screens/ContactsScreen";
+import Contacts from "./screens/Contacts";
+import ContactList from "./screens/ContactList";
+import ChatList from "./screens/ChatList";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,14 +58,14 @@ function TabNavigation({navigation}) {
 
             <Tab.Screen
                 name="Chats"
-                component={ChatListScreen}
+                component={ChatList}
                 options={{
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="chatbox-ellipses-outline" size={24} color="black"/>
                     ),
                     headerRight: () => (
                         <Ionicons
-                            onPress={() => navigation.navigate('ContactsScreen')}
+                            onPress={() => navigation.navigate('ContactList')}
                             name="create-outline"
                             size={24}
                             color="black"
@@ -108,8 +111,8 @@ export default function App() {
                             }}
                         />
                         <Stack.Screen
-                            name="ContactsScreen"
-                            component={ContactsScreen}
+                            name="ContactList"
+                            component={ContactList}
                             options={{
                                 headerBackTitle: "Chats"
                             }}
