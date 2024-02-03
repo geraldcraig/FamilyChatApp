@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, FlatList, Image, Text, StyleSheet } from 'react-native';
+import {View, FlatList, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-const ChatList = () => {
+const ChatList = ({ navigation }) => {
     const chats = [
         {
             id: '1',
@@ -24,15 +24,20 @@ const ChatList = () => {
         // Add more chats as needed
     ];
 
+    const handleChatPress = (user) => {
+        // Navigate to the ChatScreen with the selected user
+        navigation.navigate('ChatScreen', { user });
+    };
+
     const renderItem = ({ item }) => (
-        <View style={styles.chatContainer}>
-            <Image source={{ uri: item.user.image }} style={styles.userImage} />
+        <TouchableOpacity onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
+            <Image source={{ uri: item.user.image }} style={styles.userImage}/>
             <View style={styles.chatInfo}>
                 <Text style={styles.userName}>{item.user.name}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             <Text style={styles.timestamp}>{item.timestamp}</Text>
-        </View>
+        </TouchableOpacity>
     );
 
     return (
