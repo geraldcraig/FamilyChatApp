@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, FlatList, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import userImage from "../assets/images/userImage.jpeg";
 
 const ChatList = ({ navigation }) => {
     const chats = [
@@ -31,7 +32,10 @@ const ChatList = ({ navigation }) => {
 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
-            <Image source={{ uri: item.user.image }} style={styles.userImage}/>
+            <Image
+                style={styles.image}
+                source={userImage}
+            />
             <View style={styles.chatInfo}>
                 <Text style={styles.userName}>{item.user.name}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
@@ -77,6 +81,14 @@ const styles = StyleSheet.create({
     timestamp: {
         color: '#777',
     },
+    image: {
+        borderRadius: 50,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        height: 50,
+        width: 50,
+        marginRight: 10
+    }
 });
 
 export default ChatList;
