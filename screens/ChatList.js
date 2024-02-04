@@ -6,23 +6,22 @@ const ChatList = ({ navigation }) => {
     const chats = [
         {
             id: '1',
-            user: { name: 'John Doe', image: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/8.png" },
+            user: { name: 'John Doe' },
             lastMessage: "How are you doing? Did you get any chance to look at what I've sent you?",
             timestamp: '2:30 PM',
         },
         {
             id: '2',
-            user: { name: 'Jane Smith', image: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/8.png" },
+            user: { name: 'Jane Smith' },
             lastMessage: "Well done this sprint, guys!",
             timestamp: 'Yesterday',
         },
         {
             id: '3',
-            user: { name: 'Bob Johnson', image: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/8.png" },
+            user: { name: 'Bob Johnson' },
             lastMessage: "Could you please review my last merge?",
             timestamp: 'Monday',
         },
-        // Add more chats as needed
     ];
 
     const handleChatPress = (user) => {

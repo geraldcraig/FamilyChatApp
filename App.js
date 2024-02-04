@@ -15,6 +15,8 @@ import ContactsScreen from "./screens/ContactsScreen";
 import Contacts from "./screens/Contacts";
 import ContactList from "./screens/ContactList";
 import ChatList from "./screens/ChatList";
+import PhotoGrid from "./screens/PhotoGrid";
+import ImageScreen from "./screens/ImageScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,7 +30,7 @@ function TabNavigation({navigation}) {
         <Tab.Navigator initialRouteName="Chats">
             <Tab.Screen
                 name="Gallery"
-                component={GalleryScreen}
+                component={ImageScreen}
                 options={{
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="images-outline" size={24} color="black"/>

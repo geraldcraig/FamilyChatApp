@@ -1,27 +1,30 @@
 import React from 'react';
-import { View, FlatList, Image, Text, StyleSheet } from 'react-native';
+import {View, FlatList, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import userImage from "../assets/images/userImage.jpeg";
 
-const ContactList = () => {
+const ContactList = ({ navigation }) => {
     const contacts = [
         { id: '1', name: 'John Doe', status: 'Available'},
         { id: '2', name: 'Jane Smith', status: 'Busy'},
         { id: '3', name: 'Bob Johnson', status: 'Offline'},
-        {id: '4', name: 'Alice Williams',
-            status: 'Hey there!',
-            image: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/8.png"
-        },
-        {
-            id: '5',
-            name: 'Charlie Brown',
-            status: 'Hey there!',
-            image: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/8.png"
-        },
-        // Add more contacts as needed
+        { id: '4', name: 'Alice Williams', status: 'Hey there'},
+        { id: '5', name: 'Robert Smith', status: 'Hey there!'},
+        { id: '6', name: 'David Jones', status: 'Hey there!'},
+        { id: '7', name: 'John Wilson', status: 'Hey there!'},
+        { id: '8', name: 'Bob Smith', status: 'Hey there!'},
+        { id: '9', name: 'Joe Jones', status: 'Hey there!'}
     ];
 
+    const handleChatPress = (user) => {
+        // Navigate to the ChatScreen with the selected user
+        navigation.navigate('ChatScreen', { user });
+    };
+
     const renderItem = ({ item }) => (
+        <TouchableOpacity onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
+
         <View style={styles.contactContainer}>
+
             <Image
                 style={styles.image}
                 source={userImage}
@@ -31,6 +34,8 @@ const ContactList = () => {
                 <Text style={styles.contactStatus}>{item.status}</Text>
             </View>
         </View>
+        </TouchableOpacity>
+
     );
 
     return (

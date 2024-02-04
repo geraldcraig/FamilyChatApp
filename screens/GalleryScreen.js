@@ -8,6 +8,9 @@ export default function GalleryScreen() {
         <View style={styles.container}>
             <View style={styles.imageContainer}>
                 <Image source={PlaceholderImage} style={styles.image} />
+                <Image source={PlaceholderImage} style={styles.image} />
+                <Image source={PlaceholderImage} style={styles.image} />
+                <Image source={PlaceholderImage} style={styles.image} />
             </View>
             <StatusBar style="auto" />
         </View>
@@ -22,11 +25,12 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         flex: 1,
-        paddingTop: 58,
+        paddingTop: 20,
     },
     image: {
-        width: 320,
-        height: 440,
+        width: 160,
+        height: 220,
         borderRadius: 18,
+        paddingVertical: 10
     },
 });
