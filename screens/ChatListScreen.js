@@ -1,37 +1,17 @@
 import React from 'react';
-import {View, FlatList, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import userImage from "../assets/images/userImage.jpeg";
 import chats from '../assets/data/chats.json';
 
 const ChatListScreen = ({ navigation }) => {
-    // const chats = [
-    //     {
-    //         id: '1',
-    //         user: { name: 'John Doe' },
-    //         lastMessage: "How are you doing? Did you get any chance to look at what I've sent you?",
-    //         timestamp: '2:30 PM',
-    //     },
-    //     {
-    //         id: '2',
-    //         user: { name: 'Jane Smith' },
-    //         lastMessage: "Well done this sprint, guys!",
-    //         timestamp: 'Yesterday',
-    //     },
-    //     {
-    //         id: '3',
-    //         user: { name: 'Bob Johnson' },
-    //         lastMessage: "Could you please review my last merge?",
-    //         timestamp: 'Monday',
-    //     },
-    // ];
 
     const handleChatPress = (user) => {
         // Navigate to the ChatScreen with the selected user
-        navigation.navigate('Chats', { user });
+        navigation.navigate('ChatScreen', { user });
     };
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
+        <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
             <Image
                 style={styles.image}
                 source={userImage}
@@ -41,7 +21,7 @@ const ChatListScreen = ({ navigation }) => {
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             <Text style={styles.timestamp}>{item.timestamp}</Text>
-        </TouchableOpacity>
+        </Pressable>
     );
 
     return (

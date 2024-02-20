@@ -89,32 +89,6 @@ export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator>
-          {/*{isSignedIn ? (*/}
-          {/*    <>*/}
-          {/*      <Stack.Screen*/}
-          {/*          name="Home"*/}
-          {/*          component={TabNavigation}*/}
-          {/*          options={{*/}
-          {/*            headerShown: false*/}
-          {/*          }}*/}
-          {/*      />*/}
-          {/*      <Stack.Screen*/}
-          {/*          name="ChatScreen"*/}
-          {/*          component={ChatScreen}*/}
-          {/*          options={{*/}
-          {/*            headerBackTitle: "Chats"*/}
-          {/*          }}*/}
-          {/*      />*/}
-          {/*      <Stack.Screen*/}
-          {/*          name="ContactList"*/}
-          {/*          component={ContactListScreen}*/}
-          {/*          options={{*/}
-          {/*            headerBackTitle: "Chats"*/}
-          {/*          }}*/}
-          {/*      />*/}
-          {/*    </>*/}
-          {/*) : (*/}
-          {/*    <>*/}
                 <Stack.Screen name="Sign In" component={SignInScreen}/>
                 <Stack.Screen name="Sign Up" component={SignUpScreen}/>
                 <Stack.Screen
@@ -125,22 +99,19 @@ export default function App() {
                     }}
                 />
                 <Stack.Screen
-                    name="Chats"
+                    name="ChatScreen"
                     component={ChatScreen}
-                    options={{
-                        headerBackTitle: "Contacts"
-                    }}
+                    // options={{
+                    //     headerBackTitle: "Chats"
+                    // }}
                 />
                 <Stack.Screen
                     name="Contacts"
                     component={ContactListScreen}
-                    options={{
-                        headerBackTitle: "Chats"
-                    }}
+                    // options={{
+                    //     headerBackTitle: "Chats"
+                    // }}
                 />
-
-              {/*</>*/}
-          {/*)}*/}
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>

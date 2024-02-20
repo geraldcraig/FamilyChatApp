@@ -1,27 +1,17 @@
 import React from 'react';
-import {View, FlatList, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import userImage from "../assets/images/userImage.jpeg";
+import contacts from '../assets/data/contacts.json';
 
 const ContactListScreen = ({ navigation }) => {
-    const contacts = [
-        { id: '1', name: 'John Doe', status: 'Available'},
-        { id: '2', name: 'Jane Smith', status: 'Busy'},
-        { id: '3', name: 'Bob Johnson', status: 'Offline'},
-        { id: '4', name: 'Alice Williams', status: 'Hey there'},
-        { id: '5', name: 'Robert Smith', status: 'Hey there!'},
-        { id: '6', name: 'David Jones', status: 'Hey there!'},
-        { id: '7', name: 'John Wilson', status: 'Hey there!'},
-        { id: '8', name: 'Bob Smith', status: 'Hey there!'},
-        { id: '9', name: 'Joe Jones', status: 'Hey there!'}
-    ];
 
     const handleChatPress = (user) => {
         // Navigate to the ChatScreen with the selected user
-        navigation.navigate('Chats', { user });
+        navigation.navigate('ChatScreen', { user });
     };
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
+        <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
 
             <View style={styles.contactContainer}>
 
@@ -34,7 +24,7 @@ const ContactListScreen = ({ navigation }) => {
                     <Text style={styles.contactStatus}>{item.status}</Text>
                 </View>
             </View>
-        </TouchableOpacity>
+        </Pressable>
 
     );
 
