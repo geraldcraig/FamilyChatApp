@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
@@ -10,10 +10,15 @@ import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
+import Gallery from "./screens/Gallery";
 import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
+import SignUpTest from "./components/SignUpTest";
+import ChatList from "./components/ChatList";
+import UserList from "./components/UserList";
+// import MessagesContextProvider from "./store/messages-context";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,12 +27,12 @@ const Tab = createBottomTabNavigator();
 //     return true;
 // };
 
-function TabNavigation({navigation}) {
+function TabNavigation({ navigation }) {
   return (
       <Tab.Navigator initialRouteName="Chats">
         <Tab.Screen
             name="Gallery"
-            component={GalleryScreen}
+            component={Gallery}
             options={{
               tabBarIcon: ({color, size}) => (
                   <Ionicons name="images-outline" size={24} color="black"/>
@@ -87,34 +92,38 @@ export default function App() {
   // const isSignedIn = false;
 
   return (
-      <NavigationContainer>
-        <Stack.Navigator>
-                <Stack.Screen name="Sign In" component={SignInScreen}/>
-                <Stack.Screen name="Sign Up" component={SignUpScreen}/>
-                <Stack.Screen
-                    name="Home"
-                    component={TabNavigation}
-                    options={{
-                        headerShown: false
-                    }}
-                />
-                <Stack.Screen
-                    name="ChatScreen"
-                    component={ChatScreen}
-                    // options={{
-                    //     headerBackTitle: "Chats"
-                    // }}
-                />
-                <Stack.Screen
-                    name="Contacts"
-                    component={ContactListScreen}
-                    // options={{
-                    //     headerBackTitle: "Chats"
-                    // }}
-                />
-        </Stack.Navigator>
-        <StatusBar style="auto" />
-      </NavigationContainer>
+    <>
+      <StatusBar style="auto" />
+
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Sign In" component={SignInScreen} />
+            <Stack.Screen name="Sign Up" component={SignUpTest} />
+            <Stack.Screen
+              name="Home"
+              component={TabNavigation}
+              options={{
+                headerShown: false
+              }}
+            />
+            <Stack.Screen
+              name="ChatScreen"
+              component={ChatScreen}
+            // options={{
+            //     headerBackTitle: "Chats"
+            // }}
+            />
+            <Stack.Screen
+              name="Contacts"
+              component={ContactListScreen}
+            // options={{
+            //     headerBackTitle: "Chats"
+            // }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+
+    </>
   );
 }
 

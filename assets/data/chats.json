@@ -3,13 +3,13 @@
     "id": "1",
     "user": { "name": "John Doe" },
     "lastMessage": "How are you doing? Did you get any chance to look at what I've sent you?",
-    "timestamp": "2:30 PM",
+    "timestamp": "2:30 PM"
   },
   {
     "id": "2",
     "user": { "name": "Jane Smith" },
     "lastMessage": "Well done this sprint, guys!",
-    "timestamp": "Yesterday",
+    "timestamp": "Yesterday"
   },
   {
     "id": "3",

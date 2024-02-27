@@ -12,9 +12,7 @@ const ContactListScreen = ({ navigation }) => {
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
-
             <View style={styles.contactContainer}>
-
                 <Image
                     style={styles.image}
                     source={userImage}

@@ -1,31 +1,37 @@
 import {Button, Image, StyleSheet, Text, TextInput, View} from "react-native";
 import {useState} from "react";
-import axios from 'axios';
+import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
+import {app} from '../firebaseConfig';
 
 import userImage from '../assets/images/userImage.jpeg';
 
+const auth = getAuth(app);
 
-const SettingsScreen = ({ navigation }) => {
+const SettingsScreen = ({navigation}) => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [about, setAbout] = useState('');
 
-    const API_KEY = 'AIzaSyBXVOvznXFgKlr4csQ1HzthpvsG7HbEphM';
-
-    const signOut = async () => {
-        try {
-          // await axios.post(
-          //   'https://identitytoolkit.googleapis.com/v1/accounts:signOut?key=' + API_KEY
-          // );
-          // Handle success, navigate to sign-in screen
-          console.log("Logged out")
-          navigation.replace('Sign In');
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    const handleSignOut = () => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                console.log('user uid:', uid);
+                navigation.replace('Sign In');
+            } else {
+                console.log('error');
+            }
+        });
+        // signOut(auth).then(() => {
+        //     const uid = auth.currentUser.uid;
+        //     console.log('user uid:', uid);
+        //     navigation.replace('Sign In');
+        // }).catch((error) => {
+        //     console.log('error');
+        // });
+    };
 
     return (
         <View style={styles.container}>
@@ -65,8 +71,9 @@ const SettingsScreen = ({ navigation }) => {
                 console.log("firstname : ", firstName);
                 console.log("lastname : ", lastName);
                 console.log("email: ", email);
-                console.log("about: ", about)} }/>
-            <Button title="Sign Out" onPress={signOut} />
+                console.log("about: ", about)
+            }}/>
+            <Button title="Sign Out" onPress={handleSignOut}/>
         </View>
     );
 }

@@ -1,6 +1,9 @@
 import {useState} from "react";
 import {Button, StyleSheet, TextInput, View} from "react-native";
-import axios from "axios";
+import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
+import {app} from '../firebaseConfig';
+
+const auth = getAuth(app);
 
 const SignUpScreen = ({navigation}) => {
     const [firstName, setFirstName] = useState('');
@@ -8,24 +11,17 @@ const SignUpScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const API_KEY = 'AIzaSyBXVOvznXFgKlr4csQ1HzthpvsG7HbEphM';
-
-    const handleSignUp = async () => {
-        try {
-            const response = await axios.post(
-                'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + API_KEY, {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-                returnSecureToken: true,
+    const handleSignUp = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log('Signed up successfully:', user);
+                navigation.replace('Home');
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                console.log('Sign up error:', errorMessage)
             });
-            console.log(response.data); // Handle successful sign-up
-            navigation.replace('Home');
-        } catch (error) {
-            console.error('Sign-up error:', error.response.data.error.message);
-            // Handle sign-up error
-        }
     };
 
     return (
@@ -57,7 +53,7 @@ const SignUpScreen = ({navigation}) => {
                 onChangeText={(newText) => setPassword(newText)}
                 defaultValue={password}
             />
-            <Button title="Submit" onPress={handleSignUp} />
+            <Button title="Submit" onPress={handleSignUp}/>
             <Button title="Go to Sign In" onPress={() => navigation.replace('Sign In')}/>
         </View>
     );

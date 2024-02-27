@@ -1,9 +1,10 @@
-import {useCallback, useState} from "react";
+import {useCallback, useContext, useState} from "react";
 import {ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
+import {MessagesContext} from "../store/messages-context";
 
 const ChatScreen = () => {
-
+    const messagesCtx = useContext(MessagesContext)
     const [messageText, setMessageText] = useState("");
 
     const sendMessage = useCallback(() => {
@@ -11,7 +12,7 @@ const ChatScreen = () => {
     }, [messageText]);
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} messages={messagesCtx.messages}>
             <ImageBackground
                 // source={image}
                 style={styles.backgroundImage}
@@ -25,20 +26,17 @@ const ChatScreen = () => {
                     onPress={() => console.log("Plus icon")}>
                     <Ionicons name="add-outline" size={24} color="black" />
                 </Pressable>
-
                 <TextInput
                     style={styles.textBox}
                     value={messageText}
                     onChangeText={(newMessage) => setMessageText(newMessage)}
                     onSubmitEditing={sendMessage}
                 />
-
                 <Pressable
                     style={styles.button}
                     onPress={(sendMessage) => console.log("Send icon: " + messageText)}>
                     <Ionicons name="send-outline" size={24} color="black" />
                 </Pressable>
-
             </View>
         </View>
     );

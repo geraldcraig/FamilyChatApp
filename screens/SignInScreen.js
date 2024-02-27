@@ -1,28 +1,26 @@
 import {useState} from "react";
 import {Button, StyleSheet, TextInput, View} from "react-native";
-import axios from 'axios';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import userContext, {UserContext} from "../store/auth-context";
+import {app} from '../firebaseConfig';
 
-const SignInScreen = ({navigation}) => {
+const auth = getAuth(app);
+
+const SignInScreen = ({ route, navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const API_KEY = 'AIzaSyBXVOvznXFgKlr4csQ1HzthpvsG7HbEphM';
-
-    const handleSignIn = async () => {
-        try {
-            const response = await axios.post(
-                'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + API_KEY,
-                {
-                    email: email,
-                    password: password,
-                    returnSecureToken: true,
-                });
-            console.log(response.data); // Handle successful sign-in
-            navigation.replace('Home');
-        } catch (error) {
-            console.error('Sign-in error:', error.response.data.error.message);
-            // Handle sign-in error
-        }
+    const handleSignIn = () => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log('Signed in successfully:', user);
+                navigation.replace('Home');
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                console.log('Sign in error:', errorMessage)
+            });
     };
 
     return (
