@@ -1,18 +1,33 @@
 import {useCallback, useContext, useState} from "react";
-import {ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Button, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {Ionicons} from '@expo/vector-icons';
-import {MessagesContext} from "../store/messages-context";
+// import {MessagesContext} from "../store/messages-context";
+import { useMessagesDispatch } from "../store/messages-context";
 
 const ChatScreen = () => {
-    const messagesCtx = useContext(MessagesContext)
-    const [messageText, setMessageText] = useState("");
+    // const messagesCtx = useContext(MessagesContext)
+    // const [messageText, setMessageText] = useState("");
+    //
+    // const sendMessage = useCallback(() => {
+    //     setMessageText("");
+    // }, [messageText]);
 
-    const sendMessage = useCallback(() => {
-        setMessageText("");
-    }, [messageText]);
+    const [message, setMessage] = useState('');
+    const dispatch = useMessagesDispatch();
+
+    let nextId = 1;
+
+    const handleAddMessage = () => {
+        dispatch({
+            type: 'added',
+            id: nextId++, // Assuming you have nextId defined somewhere
+            message: message,
+        });
+        setMessage('');
+    };
 
     return (
-        <View style={styles.container} messages={messagesCtx.messages}>
+        <View style={styles.container} messages={message}>
             <ImageBackground
                 // source={image}
                 style={styles.backgroundImage}
@@ -26,17 +41,18 @@ const ChatScreen = () => {
                     onPress={() => console.log("Plus icon")}>
                     <Ionicons name="add-outline" size={24} color="black" />
                 </Pressable>
-                <TextInput
-                    style={styles.textBox}
-                    value={messageText}
-                    onChangeText={(newMessage) => setMessageText(newMessage)}
-                    onSubmitEditing={sendMessage}
-                />
-                <Pressable
-                    style={styles.button}
-                    onPress={(sendMessage) => console.log("Send icon: " + messageText)}>
-                    <Ionicons name="send-outline" size={24} color="black" />
-                </Pressable>
+                {/*<TextInput*/}
+                {/*    style={styles.textBox}*/}
+                {/*    value={message}*/}
+                {/*    onChangeText={setMessage}*/}
+                {/*    // onSubmitEditing={sendMessage}*/}
+                {/*/>*/}
+                {/*<Pressable*/}
+                {/*    style={styles.button}*/}
+                {/*    onPress={(sendMessage) => console.log("Send icon: " + messageText)}>*/}
+                {/*    <Ionicons name="send-outline" size={24} color="black" />*/}
+                {/*</Pressable>*/}
+                <Button title="Add" onPress={handleAddMessage} />
             </View>
         </View>
     );

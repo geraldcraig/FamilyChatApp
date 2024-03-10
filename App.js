@@ -89,7 +89,7 @@ function TabNavigation({ navigation }) {
 }
 
 export default function App() {
-  // const isSignedIn = false;
+  const isSignedIn = true;
 
   return (
     <>
