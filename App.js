@@ -89,7 +89,7 @@ function TabNavigation({ navigation }) {
 }
 
 export default function App() {
-  const isSignedIn = true;
+  // const isSignedIn = true;
 
   return (
     <>
@@ -98,7 +98,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Sign In" component={SignInScreen} />
-            <Stack.Screen name="Sign Up" component={SignUpTest} />
+            <Stack.Screen name="Sign Up" component={SignUpScreen} />
             <Stack.Screen
               name="Home"
               component={TabNavigation}

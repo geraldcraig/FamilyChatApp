@@ -1,11 +1,11 @@
 import {Button, Image, StyleSheet, Text, TextInput, View} from "react-native";
 import {useState} from "react";
-import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
-import {app} from '../firebaseConfig';
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from '../firebaseConfig';
 
 import userImage from '../assets/images/userImage.jpeg';
 
-const auth = getAuth(app);
+// const auth = getAuth(app);
 
 const SettingsScreen = ({navigation}) => {
 
