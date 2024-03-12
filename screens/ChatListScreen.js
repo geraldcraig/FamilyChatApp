@@ -1,28 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import userImage from "../assets/images/userImage.jpeg";
 import chats from '../assets/data/chats.json';
 
-import { db } from '../firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
 
 const ChatListScreen = ({ navigation }) => {
-    // function UserChats() {
-    //     const [messages, setMessages] = useState(null);
-    //
-    //     useEffect(() => {
-    //         const ref = collection(db, 'messages');
-    //
-    //         getDocs(ref)
-    //             .then((snapshot) => {
-    //                 let results = []
-    //                 snapshot.docs.forEach(doc => {
-    //                     results.push({id: doc.id, ...doc.data()})
-    //                 })
-    //                 setMessages(results)
-    //             })
-    //     }, []);
-    // }
 
     const handleChatPress = (user) => {
         // Navigate to the ChatScreen with the selected user
@@ -31,10 +13,10 @@ const ChatListScreen = ({ navigation }) => {
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
-             <Image
+            <Image
                 style={styles.image}
-                 source={userImage}
-             />
+                source={userImage}
+            />
             <View style={styles.chatInfo}>
                 <Text style={styles.userName}>{item.user.name}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>

@@ -23,7 +23,6 @@ const ContactListScreen = ({ navigation }) => {
                 </View>
             </View>
         </Pressable>
-
     );
 
     return (

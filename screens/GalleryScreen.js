@@ -1,30 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { launchImageLibraryAsync } from "expo-image-picker";
+import { useState } from "react";
 
-export default function ImageScreen() {
-    const [image, setImage] = useState(null);
-
-    const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        console.log(result);
-
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
+export default function App() {
+    const [imageURIList, setImageURIList] = useState([]);
+    async function pickImage() {
+        const image = await launchImageLibraryAsync();
+        if (image.canceled) {
+            alert("No image selected");
+        } else {
+            setImageURIList([...imageURIList, image.assets[0].uri]);
         }
-    };
+    }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </View>
+        <SafeAreaProvider>
+            <SafeAreaView style={{ flex: 1 }}>
+                <Text style={styles.title}>My favorite pictures</Text>
+                <View style={styles.body}>
+                    <ScrollView>
+                        {imageURIList.map((uri, i) => (
+                            <Image style={styles.image} key={uri + i} source={{ uri }} />
+                        ))}
+                    </ScrollView>
+                </View>
+                <View style={styles.footer}>
+                    <TouchableOpacity style={styles.btn} onPress={pickImage}>
+                        <Text style={styles.btnTxt}>Add picture</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 }
+
+const styles = StyleSheet.create({
+    title: {
+        fontSize: 30,
+        paddingVertical: 10,
+        textAlign: "center",
+    },
+    body: {
+        flex: 6,
+    },
+    image: {
+        height: 300,
+        marginVertical: 30
+    },
+    footer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    btn: {
+        backgroundColor: "black",
+        padding: 30
+    },
+    btnTxt: {
+        color: "white"
+    }
+});

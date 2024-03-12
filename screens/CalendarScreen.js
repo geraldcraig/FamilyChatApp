@@ -1,13 +1,13 @@
-import {StyleSheet, View} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Calendar } from 'react-native-calendars';
 
 const CalendarScreen = () => {
     return (
         <View style={styles.container}>
             <Calendar
-                onDayPress={(day) => console.log('onDayPress', day) }
-                onDayLongPress={(day) => console.log('onDayLongPress', day) }
-                onMonthChange={(date) => console.log('onMonthChange', date) }
+                onDayPress={(day) => console.log('onDayPress', day)}
+                onDayLongPress={(day) => console.log('onDayLongPress', day)}
+                onMonthChange={(date) => console.log('onMonthChange', date)}
                 onPressArrowLeft={(goToPreviousMonth) => {
                     console.log('onPressArrowLeft'); goToPreviousMonth();
                 }}

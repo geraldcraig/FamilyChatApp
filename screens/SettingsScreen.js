@@ -1,13 +1,12 @@
-import {Button, Image, StyleSheet, Text, TextInput, View} from "react-native";
-import {useState} from "react";
-import {onAuthStateChanged, signOut} from "firebase/auth";
-import {auth} from '../firebaseConfig';
+import { Button, Image, StyleSheet, TextInput, View } from "react-native";
+import { useState } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from '../firebaseConfig';
 
 import userImage from '../assets/images/userImage.jpeg';
 
-// const auth = getAuth(app);
 
-const SettingsScreen = ({navigation}) => {
+const SettingsScreen = ({ navigation }) => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -15,26 +14,15 @@ const SettingsScreen = ({navigation}) => {
     const [about, setAbout] = useState('');
 
     const handleSignOut = () => {
-        // onAuthStateChanged(auth, (user) => {
-        //     if (user) {
-        //         const uid = user.uid;
-        //         console.log('user uid:', uid);
-        //         navigation.replace('Sign In');
-        //     } else {
-        //         console.log('error');
-        //     }
-        // });
         signOut(auth)
             .then(() => {
-                // const uid = auth.currentUser.uid;
-                // console.log('user uid:', uid);
                 console.log('user signed out')
                 navigation.replace('Sign In');
             }).catch((error) => {
-            const errorMessage = error.message;
-            console.log('Sign out error:', errorMessage)
-            console.log('error:', error.message);
-        });
+                const errorMessage = error.message;
+                console.log('Sign out error:', errorMessage)
+                console.log('error:', error.message);
+            });
     };
 
     return (
@@ -76,8 +64,8 @@ const SettingsScreen = ({navigation}) => {
                 console.log("lastname : ", lastName);
                 console.log("email: ", email);
                 console.log("about: ", about)
-            }}/>
-            <Button title="Sign Out" onPress={handleSignOut}/>
+            }} />
+            <Button title="Sign Out" onPress={handleSignOut} />
         </View>
     );
 }
