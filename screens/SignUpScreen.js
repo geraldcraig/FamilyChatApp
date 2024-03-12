@@ -1,7 +1,8 @@
 import {useState} from "react";
 import {Button, StyleSheet, TextInput, View} from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../firebaseConfig';
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {auth} from '../firebaseConfig';
+import {child, getDatabase, ref, set} from "firebase/database";
 
 // const auth = getAuth(app);
 
@@ -11,17 +12,47 @@ const SignUpScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSignUp = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log('Signed up successfully:', user);
-                navigation.replace('Home');
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                console.log('Sign up error:', errorMessage)
-            });
+    // const handleSignUp = () => {
+    //     createUserWithEmailAndPassword(auth, email, password)
+    //         .then((userCredential) => {
+    //             const user = userCredential.user;
+    //             console.log('Signed up successfully:', user);
+    //             navigation.replace('Home');
+    //         })
+    //         .catch((error) => {
+    //             const errorMessage = error.message;
+    //             console.log('Sign up error:', errorMessage)
+    //         });
+    // };
+
+    const handleSignUp = async () => {
+        try {
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            const {uid} = result.user;
+
+            const userData = await createUser(firstName, lastName, email, uid);
+
+            console.log('Signed up successfully:', result);
+            console.log("UserData: ", userData);
+            navigation.replace('Home');
+        } catch (error) {
+            const errorMessage = error.message;
+            console.log('Sign up error:', errorMessage)
+        }
+    }
+
+    const createUser = async (firstName, lastName, email, userId) => {
+        const userData = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            userId: userId,
+            signUpDate: new Date().toISOString()
+        };
+        const dbRef = ref(getDatabase());
+        const childRef = child(dbRef, `users/${userId}`);
+        await set(childRef, userData);
+        return userData;
     };
 
     return (

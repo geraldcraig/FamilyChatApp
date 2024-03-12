@@ -3,7 +3,6 @@ import { getAuth, getReactNativePersistence, initializeAuth } from "firebase/aut
 import { getFirestore } from 'firebase/firestore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyBXVOvznXFgKlr4csQ1HzthpvsG7HbEphM",
     authDomain: "whatsapp-test-88143.firebaseapp.com",

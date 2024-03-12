@@ -1,7 +1,7 @@
 import {Button, Image, StyleSheet, Text, TextInput, View} from "react-native";
 import {useState} from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from '../firebaseConfig';
+import {onAuthStateChanged, signOut} from "firebase/auth";
+import {auth} from '../firebaseConfig';
 
 import userImage from '../assets/images/userImage.jpeg';
 
@@ -15,22 +15,26 @@ const SettingsScreen = ({navigation}) => {
     const [about, setAbout] = useState('');
 
     const handleSignOut = () => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const uid = user.uid;
-                console.log('user uid:', uid);
-                navigation.replace('Sign In');
-            } else {
-                console.log('error');
-            }
-        });
-        // signOut(auth).then(() => {
-        //     const uid = auth.currentUser.uid;
-        //     console.log('user uid:', uid);
-        //     navigation.replace('Sign In');
-        // }).catch((error) => {
-        //     console.log('error');
+        // onAuthStateChanged(auth, (user) => {
+        //     if (user) {
+        //         const uid = user.uid;
+        //         console.log('user uid:', uid);
+        //         navigation.replace('Sign In');
+        //     } else {
+        //         console.log('error');
+        //     }
         // });
+        signOut(auth)
+            .then(() => {
+                // const uid = auth.currentUser.uid;
+                // console.log('user uid:', uid);
+                console.log('user signed out')
+                navigation.replace('Sign In');
+            }).catch((error) => {
+            const errorMessage = error.message;
+            console.log('Sign out error:', errorMessage)
+            console.log('error:', error.message);
+        });
     };
 
     return (
