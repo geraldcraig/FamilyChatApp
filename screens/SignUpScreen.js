@@ -1,12 +1,10 @@
-import {useState} from "react";
-import {Button, StyleSheet, TextInput, View} from "react-native";
-import {createUserWithEmailAndPassword} from "firebase/auth";
-import {auth} from '../firebaseConfig';
-import {child, getDatabase, ref, set} from "firebase/database";
+import { useState } from "react";
+import { Button, StyleSheet, TextInput, View } from "react-native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { child, getDatabase, ref, set } from "firebase/database";
+import { auth } from '../firebaseConfig';
 
-// const auth = getAuth(app);
-
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -14,8 +12,10 @@ const SignUpScreen = ({navigation}) => {
 
     // const handleSignUp = () => {
     //     createUserWithEmailAndPassword(auth, email, password)
-    //         .then((userCredential) => {
+    //         .then(async (userCredential) => {
     //             const user = userCredential.user;
+    //             const { uid } = userCredential.user;
+    //             const userData = await createUser(firstName, lastName, email, uid);
     //             console.log('Signed up successfully:', user);
     //             navigation.replace('Home');
     //         })
@@ -28,7 +28,7 @@ const SignUpScreen = ({navigation}) => {
     const handleSignUp = async () => {
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
-            const {uid} = result.user;
+            const { uid } = result.user;
 
             const userData = await createUser(firstName, lastName, email, uid);
 
@@ -47,7 +47,8 @@ const SignUpScreen = ({navigation}) => {
             lastName: lastName,
             email: email,
             userId: userId,
-            signUpDate: new Date().toISOString()
+            signUpDate: new Date().toISOString(),
+            status: 'Hey there!'
         };
         const dbRef = ref(getDatabase());
         const childRef = child(dbRef, `users/${userId}`);
@@ -84,8 +85,8 @@ const SignUpScreen = ({navigation}) => {
                 onChangeText={(newText) => setPassword(newText)}
                 defaultValue={password}
             />
-            <Button title="Submit" onPress={handleSignUp}/>
-            <Button title="Go to Sign In" onPress={() => navigation.replace('Sign In')}/>
+            <Button title="Submit" onPress={handleSignUp} />
+            <Button title="Go to Sign In" onPress={() => navigation.replace('Sign In')} />
         </View>
     );
 }

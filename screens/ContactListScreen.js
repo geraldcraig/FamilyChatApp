@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ref, onValue } from "firebase/database";
+import { db } from '../firebaseConfig';
 import userImage from "../assets/images/userImage.jpeg";
-import contacts from '../assets/data/contacts.json';
 
 const ContactListScreen = ({ navigation }) => {
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    function fetchUserData() {
+        const dbRef = ref(db, 'users/');
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const userList = Object.keys(data).map((key) => ({
+                    id: key,
+                    ...data[key]
+                }));
+                setUserData(userList);
+            } else {
+                setUserData([]);
+            }
+        });
+    }
 
     const handleChatPress = (user) => {
         // Navigate to the ChatScreen with the selected user
@@ -18,17 +40,16 @@ const ContactListScreen = ({ navigation }) => {
                     source={userImage}
                 />
                 <View style={styles.contactInfo}>
-                    <Text style={styles.contactName}>{item.name}</Text>
+                    <Text style={styles.contactName}>{item.firstName} {item.lastName}</Text>
                     <Text style={styles.contactStatus}>{item.status}</Text>
                 </View>
             </View>
         </Pressable>
-
     );
 
     return (
         <FlatList
-            data={contacts}
+            data={userData}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
         />

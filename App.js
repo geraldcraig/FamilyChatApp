@@ -10,15 +10,11 @@ import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
-import Gallery from "./screens/Gallery";
 import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import SignUpTest from "./components/SignUpTest";
-import ChatList from "./components/ChatList";
-import UserList from "./components/UserList";
-// import MessagesContextProvider from "./store/messages-context";
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,7 +28,7 @@ function TabNavigation({ navigation }) {
       <Tab.Navigator initialRouteName="Chats">
         <Tab.Screen
             name="Gallery"
-            component={Gallery}
+            component={GalleryScreen}
             options={{
               tabBarIcon: ({color, size}) => (
                   <Ionicons name="images-outline" size={24} color="black"/>

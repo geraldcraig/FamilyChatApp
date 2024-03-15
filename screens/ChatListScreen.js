@@ -1,28 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import userImage from "../assets/images/userImage.jpeg";
-import chats from '../assets/data/chats.json';
-
+import { ref, onValue } from "firebase/database";
 import { db } from '../firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
+import userImage from "../assets/images/userImage.jpeg";
 
 const ChatListScreen = ({ navigation }) => {
-    // function UserChats() {
-    //     const [messages, setMessages] = useState(null);
-    //
-    //     useEffect(() => {
-    //         const ref = collection(db, 'messages');
-    //
-    //         getDocs(ref)
-    //             .then((snapshot) => {
-    //                 let results = []
-    //                 snapshot.docs.forEach(doc => {
-    //                     results.push({id: doc.id, ...doc.data()})
-    //                 })
-    //                 setMessages(results)
-    //             })
-    //     }, []);
-    // }
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    function fetchUserData() {
+        const dbRef = ref(db, 'chats/');
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const userList = Object.keys(data).map((key) => ({
+                    id: key,
+                    ...data[key]
+                }));
+                setUserData(userList);
+            } else {
+                setUserData([]);
+            }
+        });
+    }
 
     const handleChatPress = (user) => {
         // Navigate to the ChatScreen with the selected user
@@ -31,12 +34,12 @@ const ChatListScreen = ({ navigation }) => {
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
-             <Image
+            <Image
                 style={styles.image}
-                 source={userImage}
-             />
+                source={userImage}
+            />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.user.name}</Text>
+                <Text style={styles.userName}>{item.username}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             <Text style={styles.timestamp}>{item.timestamp}</Text>
@@ -45,7 +48,7 @@ const ChatListScreen = ({ navigation }) => {
 
     return (
         <FlatList
-            data={chats}
+            data={userData}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
         />

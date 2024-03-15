@@ -1,39 +1,36 @@
-import {useState} from "react";
-import {Button, StyleSheet, TextInput, View} from "react-native";
+import { useState } from "react";
+import { Button, StyleSheet, TextInput, View } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-// import userContext, {UserContext} from "../store/auth-context";
 import { auth } from '../firebaseConfig';
 
-// const auth = getAuth(app);
-
-const SignInScreen = ({ route, navigation }) => {
+const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // const handleSignIn = () => {
-    //     signInWithEmailAndPassword(auth, email, password)
-    //         .then((userCredential) => {
-    //             const user = userCredential.user;
-    //             console.log('Signed in successfully:', user);
-    //             navigation.replace('Home');
-    //         })
-    //         .catch((error) => {
-    //             const errorMessage = error.message;
-    //             console.log('Sign in error:', errorMessage)
-    //         });
-    // };
+    const handleSignIn = () => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log('Signed in successfully:', user);
+                navigation.replace('Home');
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                console.log('Sign in error:', errorMessage)
+            });
+    };
 
-    const handleSignIn = async () => {
-        try {
-            const result = await signInWithEmailAndPassword(auth, email, password);
-            console.log('Signed in successfully:', result.user.uid);
-            navigation.replace('Home');
-            console.log(result);
-        } catch (error) {
-            const errorMessage = error.message;
-            console.log('Sign in error:', errorMessage)
-        }
-    }
+    // const handleSignIn = async () => {
+    //     try {
+    //         const result = await signInWithEmailAndPassword(auth, email, password);
+    //         console.log('Signed in successfully:', result.user.uid);
+    //         navigation.replace('Home');
+    //         console.log(result);
+    //     } catch (error) {
+    //         const errorMessage = error.message;
+    //         console.log('Sign in error:', errorMessage)
+    //     }
+    // }
 
     return (
         <View style={styles.container}>
@@ -52,8 +49,8 @@ const SignInScreen = ({ route, navigation }) => {
                 onChangeText={(newText) => setPassword(newText)}
                 defaultValue={password}
             />
-            <Button title="Submit" onPress={handleSignIn}/>
-            <Button title="Go to Sign Up" onPress={() => navigation.replace('Sign Up')}/>
+            <Button title="Submit" onPress={handleSignIn} />
+            <Button title="Go to Sign Up" onPress={() => navigation.replace('Sign Up')} />
         </View>
     );
 }
