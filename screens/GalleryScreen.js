@@ -11,8 +11,13 @@ export default function App() {
             alert("No image selected");
         } else {
             setImageURIList([...imageURIList, image.assets[0].uri]);
+            const tempUri = image.assets[0].uri;
+            console.log("tempUri: ", tempUri);  
         }
     };
+
+   
+
 
     return (
         <SafeAreaProvider>

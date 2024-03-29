@@ -1,14 +1,37 @@
 import { Button, Image, StyleSheet, TextInput, View } from "react-native";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
-import { auth } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';
 import userImage from '../assets/images/userImage.jpeg';
+import { onValue, ref } from "firebase/database";
+import { AuthContext } from "../context/AuthContext";
+
 
 const SettingsScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [about, setAbout] = useState('');
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                const userRef = ref(db, "users/" + user.uid);
+                onValue(userRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        setFirstName(data.firstName);
+                        setLastName(data.lastName);
+                        setEmail(data.email);
+                    } else {
+                        console.log("No such user!");
+                    }
+                });
+            }
+        });
+
+        return unsubscribe;
+    }, []);
 
     const handleSignOut = () => {
         signOut(auth)
