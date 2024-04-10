@@ -13,20 +13,29 @@ const SettingsScreen = ({ navigation }) => {
     const [about, setAbout] = useState('');
 
     const { user } = useAuthContext();
-    console.log('user:', user);
+    console.log('settings screen user:', user);
 
     useEffect(() => {
-        const { uid } = user;
-        const userRef = ref(db, `users/${user.uid}`);
-        onValue(userRef, (snapshot) => {
-            const data = snapshot.val();
-            console.log('data:', data);
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setEmail(data.email);
-            setAbout(data.about);
-        });
+        getUserData();
     }, []);
+
+    function getUserData() {
+
+        try {
+            const { uid } = user;
+            const userData = ref(db, `users/${uid}`);
+            onValue(userData, (snapshot) => {
+                const data = snapshot.val();
+                console.log('data:', data);
+                setFirstName(data.firstName);
+                setLastName(data.lastName);
+                setEmail(data.email);
+                setAbout(data.about);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleSignOut = () => {
         signOut(auth)

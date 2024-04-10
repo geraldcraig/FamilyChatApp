@@ -1,9 +1,9 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {Ionicons} from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from '@expo/vector-icons';
 
 import CalendarScreen from "./screens/CalendarScreen";
 import ChatListScreen from "./screens/ChatListScreen";
@@ -26,62 +26,62 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigation({ navigation }) {
   return (
-      <Tab.Navigator initialRouteName="Chats">
-        <Tab.Screen
-            name="Gallery"
-            component={GalleryScreen}
-            options={{
-              tabBarIcon: ({color, size}) => (
-                  <Ionicons name="images-outline" size={24} color="black"/>
-              ),
-            }}
-        />
-        <Tab.Screen
-            name="Calendar"
-            component={CalendarScreen}
-            options={{
-              tabBarIcon: ({color, size}) => (
-                  <Ionicons name="calendar-outline" size={24} color="black"/>
-              ),
-            }}
-        />
-        <Tab.Screen
-            name="Groups"
-            component={GroupsScreen}
-            options={{
-              tabBarIcon: ({color, size}) => (
-                  <Ionicons name="people-outline" size={24} color="black"/>
-              ),
-            }}
-        />
-        <Tab.Screen
-            name="Chats"
-            component={ChatListScreen}
-            options={{
-              tabBarIcon: ({color, size}) => (
-                  <Ionicons name="chatbox-ellipses-outline" size={24} color="black"/>
-              ),
-              headerRight: () => (
-                  <Ionicons
-                      onPress={() => navigation.navigate('Contacts')}
-                      name="create-outline"
-                      size={24}
-                      color="black"
-                      style={{marginRight: 15}}
-                  />
-              ),
-            }}
-        />
-        <Tab.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              tabBarIcon: ({color, size}) => (
-                  <Ionicons name="settings-outline" size={24} color="black"/>
-              ),
-            }}
-        />
-      </Tab.Navigator>
+    <Tab.Navigator initialRouteName="Chats">
+      <Tab.Screen
+        name="Gallery"
+        component={GalleryScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="images-outline" size={24} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar-outline" size={24} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Groups"
+        component={GroupsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people-outline" size={24} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chats"
+        component={ChatListScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
+          ),
+          headerRight: () => (
+            <Ionicons
+              onPress={() => navigation.navigate('Contacts')}
+              name="create-outline"
+              size={24}
+              color="black"
+              style={{ marginRight: 15 }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={24} color="black" />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
@@ -90,9 +90,8 @@ export default function App() {
 
   return (
     <>
-        <AuthContextProvider>
-      <StatusBar style="auto" />
-
+      <AuthContextProvider>
+        <StatusBar style="auto" />
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Sign In" component={SignInScreen} />
@@ -120,7 +119,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-        </AuthContextProvider>
+      </AuthContextProvider>
     </>
   );
 }
