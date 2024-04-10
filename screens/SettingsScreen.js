@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
-import { onValue, ref } from "firebase/database";
+// import { onValue, ref } from "firebase/database";
 import { useAuthContext } from "../hooks/useAuthContext";
 import userImage from '../assets/images/userImage.jpeg';
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 const SettingsScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
@@ -19,19 +20,41 @@ const SettingsScreen = ({ navigation }) => {
         getUserData();
     }, []);
 
-    function getUserData() {
+    // function getUserData() {
+    //     try {
+    //         const { uid } = user;
+    //         const userData = ref(db, `users/${uid}`);
+    //         onValue(userData, (snapshot) => {
+    //             const data = snapshot.val();
+    //             console.log('data:', data);
+    //             setFirstName(data.firstName);
+    //             setLastName(data.lastName);
+    //             setEmail(data.email);
+    //             setAbout(data.about);
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 
+    async function getUserData() {
         try {
             const { uid } = user;
-            const userData = ref(db, `users/${uid}`);
-            onValue(userData, (snapshot) => {
-                const data = snapshot.val();
+            const db = getFirestore();
+            const userRef = doc(db, 'users', uid);
+
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                const data = userSnap.data();
                 console.log('data:', data);
                 setFirstName(data.firstName);
                 setLastName(data.lastName);
                 setEmail(data.email);
                 setAbout(data.about);
-            });
+            } else {
+                console.log('No such document!');
+            }
         } catch (error) {
             console.error(error);
         }

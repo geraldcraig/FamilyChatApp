@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { child, getDatabase, ref, set } from "firebase/database";
+// import { child, getDatabase, ref, set } from "firebase/database";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
 import { auth } from '../firebaseConfig';
 
 const SignUpScreen = ({ navigation }) => {
@@ -12,7 +14,7 @@ const SignUpScreen = ({ navigation }) => {
 
     // const handleSignUp = () => {
     //     createUserWithEmailAndPassword(auth, email, password)
-    //         .then(async (userCredential) => {
+    //         .then((userCredential) => {
     //             const user = userCredential.user;
     //             const { uid } = userCredential.user;
     //             const userData = await createUser(firstName, lastName, email, uid);
@@ -50,9 +52,15 @@ const SignUpScreen = ({ navigation }) => {
             signUpDate: new Date().toISOString(),
             status: 'Hey there!'
         };
-        const dbRef = ref(getDatabase());
-        const childRef = child(dbRef, `users/${userId}`);
-        await set(childRef, userData);
+        // const dbRef = ref(getDatabase());
+        // const childRef = child(dbRef, `users/${userId}`);
+        // await set(childRef, userData);
+        // return userData;
+        const db = getFirestore();
+        const userRef = doc(db, 'users', userId);
+
+        await setDoc(userRef, userData);
+
         return userData;
     };
 

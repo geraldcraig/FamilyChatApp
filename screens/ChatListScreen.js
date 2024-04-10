@@ -3,6 +3,7 @@ import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native
 import { ref, onValue } from "firebase/database";
 import { db } from '../firebaseConfig';
 import userImage from "../assets/images/userImage.jpeg";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 
 const ChatListScreen = ({ navigation }) => {
     const [userData, setUserData] = useState([]);
@@ -11,20 +12,37 @@ const ChatListScreen = ({ navigation }) => {
         fetchUserData();
     }, []);
 
-    function fetchUserData() {
-        const dbRef = ref(db, 'chats/');
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const userList = Object.keys(data).map((key) => ({
-                    id: key,
-                    ...data[key]
-                }));
-                setUserData(userList);
-            } else {
-                setUserData([]);
-            }
-        });
+    // function fetchUserData() {
+    //     const dbRef = ref(db, 'chats/');
+    //     onValue(dbRef, (snapshot) => {
+    //         const data = snapshot.val();
+    //         if (data) {
+    //             const userList = Object.keys(data).map((key) => ({
+    //                 id: key,
+    //                 ...data[key]
+    //             }));
+    //             setUserData(userList);
+    //         } else {
+    //             setUserData([]);
+    //         }
+    //     });
+    // }
+
+    async function fetchUserData() {
+        const db = getFirestore();
+        const chatsRef = collection(db, 'chats');
+
+        const chatSnap = await getDocs(chatsRef);
+
+        if (!chatSnap.empty) {
+            const chatList = chatSnap.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setUserData(chatList);
+        } else {
+            setUserData([]);
+        }
     }
 
     const handleChatPress = (user) => {
