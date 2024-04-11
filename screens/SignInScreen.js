@@ -2,15 +2,18 @@ import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebaseConfig';
+import {useAuthContext} from "../hooks/useAuthContext";
 
 const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { dispatch } = useAuthContext();
 
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
+                dispatch({ type: 'LOGIN', payload: userCredential.user });
                 console.log('Signed in successfully:', user.email);
                 navigation.replace('Home');
             })

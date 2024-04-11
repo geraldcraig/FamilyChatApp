@@ -11,6 +11,7 @@ const SettingsScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [about, setAbout] = useState('');
+    const { dispatch } = useAuthContext();
 
     const { user } = useAuthContext();
     console.log('settings screen user:', user);
@@ -40,6 +41,7 @@ const SettingsScreen = ({ navigation }) => {
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
+                dispatch({ type: 'LOGOUT' });
                 console.log('user signed out')
                 navigation.replace('Sign In');
             }).catch((error) => {
