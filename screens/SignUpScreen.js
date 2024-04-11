@@ -5,6 +5,7 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { auth } from '../firebaseConfig';
 import {useAuthContext} from "../hooks/useAuthContext";
 
+
 const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
