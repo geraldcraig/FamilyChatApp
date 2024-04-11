@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
-// import { onValue, ref } from "firebase/database";
 import { useAuthContext } from "../hooks/useAuthContext";
 import userImage from '../assets/images/userImage.jpeg';
 import { doc, getDoc, getFirestore } from "firebase/firestore";
@@ -12,6 +11,7 @@ const SettingsScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [about, setAbout] = useState('');
+    const { dispatch } = useAuthContext();
 
     const { user } = useAuthContext();
     console.log('settings screen user:', user);
@@ -63,6 +63,7 @@ const SettingsScreen = ({ navigation }) => {
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
+                dispatch({ type: 'LOGOUT' });
                 console.log('user signed out')
                 navigation.replace('Sign In');
             }).catch((error) => {

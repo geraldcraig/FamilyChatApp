@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { child, getDatabase, ref, set } from "firebase/database";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
-
 import { auth } from '../firebaseConfig';
+import {useAuthContext} from "../hooks/useAuthContext";
 
 const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { dispatch } = useAuthContext();
 
     // const handleSignUp = () => {
     //     createUserWithEmailAndPassword(auth, email, password)
@@ -31,6 +31,7 @@ const SignUpScreen = ({ navigation }) => {
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const { uid } = result.user;
+            dispatch({ type: 'LOGIN', payload: userCredential.user });
 
             const userData = await createUser(firstName, lastName, email, uid);
 
