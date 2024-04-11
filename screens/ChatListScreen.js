@@ -57,7 +57,7 @@ const ChatListScreen = ({ navigation }) => {
                 source={userImage}
             />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.username}</Text>
+                <Text style={styles.userName}>{item.firstName} {item.lastName}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             <Text style={styles.timestamp}>{item.timestamp}</Text>
