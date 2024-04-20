@@ -3,13 +3,14 @@ import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native
 import { ref, onValue } from "firebase/database";
 import { db } from '../firebaseConfig';
 import userImage from "../assets/images/userImage.jpeg";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import {collection, doc, getDocs, getFirestore} from "firebase/firestore";
+
 
 const ChatListScreen = ({ navigation }) => {
     const [userData, setUserData] = useState([]);
 
     useEffect(() => {
-        fetchUserData();
+        fetchUserData().then();
     }, []);
 
     // function fetchUserData() {
@@ -25,6 +26,14 @@ const ChatListScreen = ({ navigation }) => {
     //         } else {
     //             setUserData([]);
     //         }
+    //     });
+    // }
+
+    // async function fetchUserData() {
+    //     const querySnapshot = await getDocs(collection(db, "chats"));
+    //     querySnapshot.forEach((doc) => {
+    //         // doc.data() is never undefined for query doc snapshots
+    //         console.log(doc.id, " => ", doc.data());
     //     });
     // }
 
@@ -58,9 +67,9 @@ const ChatListScreen = ({ navigation }) => {
             />
             <View style={styles.chatInfo}>
                 <Text style={styles.userName}>{item.firstName} {item.lastName}</Text>
-                <Text style={styles.lastMessage}>{item.lastMessage}</Text>
+                <Text style={styles.lastMessage}>{item.message}</Text>
             </View>
-            <Text style={styles.timestamp}>{item.timestamp}</Text>
+            <Text style={styles.timestamp}>{item.timestamp.toDate().toDateString()}</Text>
         </Pressable>
     );
 

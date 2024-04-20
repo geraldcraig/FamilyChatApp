@@ -6,36 +6,35 @@ export const AuthContext = createContext(null);
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return { ...state, user: action.payload }
-    case 'LOGOUT':
-      return { ...state, user: null }
-    case 'AUTH_IS_READY':
-      return { user: action.payload, authIsReady: true }
+    case 'SIGN_IN':
+      return { ...state, user: action.payload };
+    case 'SIGN_OUT':
+      return { ...state, user: null };
+    case 'IS_AUTHENTICATED':
+      return { user: action.payload, isAuthenticated: true };
     default:
-      return state
+      return state;
   }
 }
 
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
-    authIsReady: false
+    isAuthenticated: false,
   });
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, user => {
-      dispatch({ type: 'AUTH_IS_READY', payload: user })
-      console.log('user:', user.email, user.uid);
-      unsub()
-    })
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      dispatch({ type: 'IS_AUTHENTICATED', payload: user })
+      unsubscribe()
+    });
   }, []);
 
-  console.log('AuthContext state:', state)
+  console.log('AuthContextProvider state:', state);
 
   return (
       <AuthContext.Provider value={{ ...state, dispatch }}>
-        { children }
+        {children}
       </AuthContext.Provider>
   );
 }

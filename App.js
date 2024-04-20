@@ -14,7 +14,10 @@ import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
+import ChatRoom from "./screens/ChatRoom";
 import { AuthContextProvider } from "./context/AuthContext";
+import {SafeAreaProvider} from "react-native-safe-area-context";
+import Navigation from "./navigation/Navigation";
 
 
 const Stack = createNativeStackNavigator();
@@ -104,8 +107,8 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="ChatScreen"
-              component={ChatScreen}
+              name="ChatRoom"
+              component={ChatRoom}
             // options={{
             //     headerBackTitle: "Chats"
             // }}
@@ -123,6 +126,18 @@ export default function App() {
     </>
   );
 }
+
+// export default function App() {
+//
+//     return (
+//         <AuthContextProvider>
+//             <SafeAreaProvider style={styles.container}>
+//                 <StatusBar style="auto" />
+//                 <Navigation />
+//             </SafeAreaProvider>
+//         </AuthContextProvider>
+//     );
+// }
 
 const styles = StyleSheet.create({
   container: {
