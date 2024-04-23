@@ -1,5 +1,5 @@
-import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { useState } from "react";
+import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth } from '../firebaseConfig';
 import userImage from '../assets/images/userImage.jpeg';

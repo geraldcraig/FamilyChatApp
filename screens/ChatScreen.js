@@ -1,46 +1,76 @@
-import { useCallback, useState } from "react";
-import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import {useEffect, useState} from "react";
+import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {Ionicons} from '@expo/vector-icons';
+import {addDoc, collection, onSnapshot} from "firebase/firestore";
+import {db} from '../firebaseConfig';
 
-const ChatScreen = () => {
+const ChatScreen = ({navigation}) => {
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
 
-    const [messageText, setMessageText] = useState("");
+    const isMyMessage = () => {
+        return true;
+    }
 
-    const sendMessage = useCallback(() => {
-        setMessageText("");
-    }, [messageText]);
+    useEffect(() => {
+        const ref = collection(db, 'chats', 'room1', 'messages');
+
+        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+            let results = [];
+            querySnapshot.docs.forEach((doc) => {
+                results.push({id: doc.id, ...doc.data()})
+            });
+            setMessages(results);
+        });
+        return () => unsubscribe();
+    }, ['ref']);
+
+    const postMessage = async () => {
+        await addDoc(collection(db, 'chats', 'room1', 'messages'), {
+            message: input,
+            timestamp: new Date(),
+        });
+        console.log("Message posted: " + input);
+        setInput('');
+    };
 
     return (
-        <View style={styles.container}>
+        <>
             <ImageBackground
                 // source={image}
-                style={styles.backgroundImage}
-            ></ImageBackground>
-
-            <Text>Chat Screen</Text>
-
+                style={styles.backgroundImage}>
+                <FlatList
+                    data={messages}
+                    renderItem={({item}) => (<Text style={[
+                        styles.messagesContainer,
+                        {
+                            backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
+                            alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',
+                        },
+                    ]}>{item.message}</Text>)}
+                    keyExtractor={(item) => item.id}
+                    style={{padding: 10}}
+                />
+            </ImageBackground>
             <View style={styles.inputContainer}>
-                <TouchableOpacity
+                <Pressable
                     style={styles.button}
                     onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black" />
-                </TouchableOpacity>
-
+                    <Ionicons name="add-outline" size={24} color="black"/>
+                </Pressable>
                 <TextInput
                     style={styles.textBox}
-                    value={messageText}
-                    onChangeText={(newMessage) => setMessageText(newMessage)}
-                    onSubmitEditing={sendMessage}
+                    value={input}
+                    onChangeText={setInput}
+                    placeholder="Type your message here..."
                 />
-
-                <TouchableOpacity
+                <Pressable
                     style={styles.button}
-                    onPress={(sendMessage) => console.log("Send icon: " + messageText)}>
-                    <Ionicons name="send-outline" size={24} color="black" />
-                </TouchableOpacity>
-
+                    onPress={postMessage}>
+                    <Ionicons name="send-outline" size={24} color="black"/>
+                </Pressable>
             </View>
-        </View>
+        </>
     );
 }
 
