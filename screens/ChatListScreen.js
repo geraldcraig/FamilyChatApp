@@ -44,9 +44,6 @@ const ChatListScreen = ({navigation, route}) => {
                     renderItem={renderItem}
                 />
             </View>
-            <View style={styles.container}>
-                <Button title="Get Messages" onPress={() => console.log('pressed')}/>
-            </View>
         </>
     )
 };
