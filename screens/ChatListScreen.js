@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import { Button, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 
 
-const ChatListScreen = ({navigation, route}) => {
+const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
 
     useEffect(() => {
@@ -14,7 +14,7 @@ const ChatListScreen = ({navigation, route}) => {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
+                results.push({ id: doc.id, ...doc.data() })
             })
             setChatRooms(results);
         });

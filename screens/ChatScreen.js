@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import {Ionicons} from '@expo/vector-icons';
-import {addDoc, collection, onSnapshot} from "firebase/firestore";
-import {db} from '../firebaseConfig';
+import { Ionicons } from '@expo/vector-icons';
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { db } from '../firebaseConfig';
 
-const ChatScreen = ({navigation}) => {
+const ChatScreen = ({  navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
