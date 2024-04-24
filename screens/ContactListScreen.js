@@ -1,39 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { ref, onValue } from "firebase/database";
-import { db } from '../firebaseConfig';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {addDoc, collection, onSnapshot} from "firebase/firestore";
+import {useAuthContext} from "../hooks/useAuthContext";
+import {db} from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 
-const ContactListScreen = ({ navigation }) => {
+const ContactListScreen = ({navigation}) => {
     const [userData, setUserData] = useState([]);
+    const {user} = useAuthContext();
+    const userId = user.uid;
+    console.log('contact list screen user:', userId + ' email: ' + user.email);
+
 
     useEffect(() => {
-        fetchUserData();
-    }, []);
+        const ref = collection(db, 'users');
 
-    function fetchUserData() {
-        const dbRef = ref(db, 'users/');
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const userList = Object.keys(data).map((key) => ({
-                    id: key,
-                    ...data[key]
-                }));
-                setUserData(userList);
-            } else {
-                setUserData([]);
-            }
+        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+            let results = [];
+            querySnapshot.docs.forEach((doc) => {
+                results.push({id: doc.id, ...doc.data()})
+            });
+            const filteredResults = results.filter((result) => result.id !== userId);
+            filteredResults.forEach((result) => console.log('result:', result.firstName + ' ' + result.lastName));
+            setUserData(filteredResults);
         });
-    }
+        return () => unsubscribe();
+    }, ['ref']);
 
-    const handleChatPress = (user) => {
-        // Navigate to the ChatScreen with the selected user
-        navigation.navigate('ChatScreen', { user });
-    };
+    // const createChatRoom = async (selectedUser, currentUser, displayFirstName, displayLastName) => {
+    //     await addDoc(collection(db, 'chats'), {
+    //         user1: selectedUser,
+    //         user2: currentUser,
+    //         timestamp: new Date(),
+    //         lastMessage: "This is the last message",
+    //         displayFirstName: displayFirstName,
+    //         displayLastName: displayLastName,
+    //     }).then(r => navigation.navigate('ChatScreen', {
+    //         chatRoomId: r.id,
+    //         user1: selectedUser,
+    //         user2: currentUser,
+    //     }));
+    //     };
 
-    const renderItem = ({ item }) => (
-        <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
+    const renderItem = ({item}) => (
+        <Pressable
+            style={styles.chatContainer}
+            onPress={() => {
+                navigation.navigate('NewChatScreen', {
+                    selectedUser: item.id,
+                    currentUser: userId,
+                    displayFirstName: item.firstName,
+                    displayLastName: item.lastName,
+                });
+            }}>
+            {/*// onPress={createChatRoom}>*/}
             <View style={styles.contactContainer}>
                 <Image
                     style={styles.image}

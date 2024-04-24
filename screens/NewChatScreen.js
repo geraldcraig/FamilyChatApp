@@ -1,46 +1,53 @@
-import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
-import { db } from '../firebaseConfig';
-import {useAuthContext} from "../hooks/useAuthContext";
+import {useEffect, useState} from "react";
+import {FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Ionicons} from '@expo/vector-icons';
+import {addDoc, collection, doc, onSnapshot, setDoc} from "firebase/firestore";
+import {db} from '../firebaseConfig';
 
-const ChatScreen = ({ route, navigation }) => {
+const NewChatScreen = ({route, navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { chatRoomId } = route.params;
-    const {user} = useAuthContext();
-    const userId = user.uid;
-    const chatRoom = chatRoomId;
-    console.log('Chat room: ' + chatRoom +  ' User: ' + userId  + ' Email: ' + user.email);
-
+    const {selectedUser, currentUser, displayFirstName, displayLastName} = route.params;
+    // console.log('Selected user: ' + selectedUser + ' Current user: ' + currentUser + ' Chatroom: ' + chatRoomId + ' User 1: ' + user1 + ' User 2: ' + user2);
 
     const isMyMessage = () => {
         return true;
     }
-
     useEffect(() => {
-        const ref = collection(db, 'chats', chatRoom, 'messages');
-
-        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
-            let results = [];
-            querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
-            });
-            setMessages(results);
-        });
-        return () => unsubscribe();
-    }, ['ref']);
-
-    const postMessage = async () => {
-        await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
-            userId: userId,
-            message: input,
+        addDoc(collection(db, 'chats'), {
+            user1: selectedUser,
+            user2: currentUser,
             timestamp: new Date(),
-        });
-        console.log("Message posted: " + input);
-        setInput('');
-    };
+            lastMessage: "This is the last message",
+            displayFirstName: displayFirstName,
+            displayLastName: displayLastName,
+
+        }).then(r => console.log("Chat room created"));
+    }, []);
+
+    // useEffect(() => {
+    //     const ref = collection(db, 'chats', chatRoom, 'messages');
+    //
+    //     const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+    //         let results = [];
+    //         querySnapshot.docs.forEach((doc) => {
+    //             results.push({id: doc.id, ...doc.data()})
+    //         });
+    //         setMessages(results);
+    //     });
+    //     return () => unsubscribe();
+    // }, ['ref']);
+    //
+    // const postMessage = async () => {
+    //     await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
+    //         selectedUser: user1,
+    //         currentUser: user2,
+    //         message: input,
+    //         timestamp: new Date(),
+    //     });
+    //     console.log("Message posted: " + input);
+    //     setInput('');
+    // };
 
     return (
         <>
@@ -72,11 +79,11 @@ const ChatScreen = ({ route, navigation }) => {
                     onChangeText={setInput}
                     placeholder="Type your message here..."
                 />
-                <Pressable
-                    style={styles.button}
-                    onPress={postMessage}>
-                    <Ionicons name="send-outline" size={24} color="black"/>
-                </Pressable>
+                {/*<Pressable*/}
+                {/*    style={styles.button}*/}
+                {/*    onPress={postMessage}>*/}
+                {/*    <Ionicons name="send-outline" size={24} color="black"/>*/}
+                {/*</Pressable>*/}
             </View>
         </>
     );
@@ -132,4 +139,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ChatScreen;
+export default NewChatScreen;

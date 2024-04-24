@@ -1,7 +1,8 @@
-import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Button, Image, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
-import { useState } from "react";
+
 
 export default function App() {
     const [imageURIList, setImageURIList] = useState([]);
@@ -12,7 +13,7 @@ export default function App() {
         } else {
             setImageURIList([...imageURIList, image.assets[0].uri]);
         }
-    };
+    }
 
     return (
         <SafeAreaProvider>

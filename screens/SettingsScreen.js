@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
-import { onValue, ref } from "firebase/database";
+import { doc, getDoc } from "firebase/firestore";
 import { useAuthContext } from "../hooks/useAuthContext";
 import userImage from '../assets/images/userImage.jpeg';
+
 
 const SettingsScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
@@ -14,25 +15,47 @@ const SettingsScreen = ({ navigation }) => {
     const { dispatch } = useAuthContext();
 
     const { user } = useAuthContext();
-    console.log('settings screen user:', user);
+    const userId = user.email;
+    console.log('settings screen user:', userId);
 
     useEffect(() => {
-        getUserData();
+        getUserData().then(r => console.log('r:', r));
     }, []);
 
-    function getUserData() {
+    // function getUserData() {
+    //
+    //     try {
+    //         const { uid } = user;
+    //         const userData = ref(db, `users/${uid}`);
+    //         onValue(userData, (snapshot) => {
+    //             const data = snapshot.val();
+    //             console.log('data:', data);
+    //             setFirstName(data.firstName);
+    //             setLastName(data.lastName);
+    //             setEmail(data.email);
+    //             setAbout(data.about);
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 
+    async function getUserData() {
         try {
             const { uid } = user;
-            const userData = ref(db, `users/${uid}`);
-            onValue(userData, (snapshot) => {
-                const data = snapshot.val();
+            const userRef = doc(db, `users/${uid}`);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                const data = userSnap.data();
                 console.log('data:', data);
                 setFirstName(data.firstName);
                 setLastName(data.lastName);
                 setEmail(data.email);
                 setAbout(data.about);
-            });
+            } else {
+                console.log('No such document!');
+            }
         } catch (error) {
             console.error(error);
         }

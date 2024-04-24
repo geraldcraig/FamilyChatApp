@@ -1,58 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { ref, onValue } from "firebase/database";
-import { db } from '../firebaseConfig';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {collection, onSnapshot} from "firebase/firestore";
+import {db} from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
+import {useAuthContext} from "../hooks/useAuthContext";
 
-const ChatListScreen = ({ navigation }) => {
-    const [userData, setUserData] = useState([]);
+
+const ChatListScreen = ({navigation}) => {
+    const [chatRooms, setChatRooms] = useState([]);
+    const {user} = useAuthContext();
+    const userId = user.email;
+    console.log('chat list screen user:', userId);
 
     useEffect(() => {
-        fetchUserData();
-    }, []);
+        const ref = collection(db, 'chats');
 
-    function fetchUserData() {
-        const dbRef = ref(db, 'chats/');
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const userList = Object.keys(data).map((key) => ({
-                    id: key,
-                    ...data[key]
-                }));
-                setUserData(userList);
-            } else {
-                setUserData([]);
-            }
+        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+            let results = [];
+            querySnapshot.docs.forEach((doc) => {
+                results.push({id: doc.id, ...doc.data()})
+            })
+            setChatRooms(results);
         });
-    }
+        return () => unsubscribe();
+    }, ['ref']);
 
-    const handleChatPress = (user) => {
-        // Navigate to the ChatScreen with the selected user
-        navigation.navigate('ChatScreen', { user });
-    };
-
-    const renderItem = ({ item }) => (
-        <Pressable onPress={() => handleChatPress(item.user)} style={styles.chatContainer}>
+    const renderItem = ({item}) => (
+        <Pressable onPress={() => navigation.navigate('ChatScreen', {
+            chatRoomId: item.id,
+            user1: item.user1,
+            user2: item.user2
+        })}
+                   style={styles.chatContainer}>
             <Image
                 style={styles.image}
                 source={userImage}
             />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.username}</Text>
+                <Text style={styles.userName}>{item.displayFirstName} {item.displayLastName}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
-            <Text style={styles.timestamp}>{item.timestamp}</Text>
+            {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}
         </Pressable>
     );
 
     return (
-        <FlatList
-            data={userData}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-        />
-    );
+        <>
+            <View style={styles.container}>
+                <FlatList
+                    data={chatRooms}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderItem}
+                />
+            </View>
+        </>
+    )
 };
 
 const styles = StyleSheet.create({

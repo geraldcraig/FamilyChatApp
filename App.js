@@ -15,6 +15,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import { AuthContextProvider } from "./context/AuthContext";
+import NewChatScreen from "./screens/NewChatScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -117,6 +118,13 @@ export default function App() {
             //     headerBackTitle: "Chats"
             // }}
             />
+              <Stack.Screen
+                  name="NewChatScreen"
+                  component={NewChatScreen}
+                  // options={{
+                  //     headerBackTitle: "Chats"
+                  // }}
+              />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthContextProvider>
