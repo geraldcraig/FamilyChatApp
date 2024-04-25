@@ -9,8 +9,6 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
     const { user } = useAuthContext();
-    const userId = user.email;
-    console.log('chat list screen user:', userId);
 
     useEffect(() => {
         const ref = collection(db, 'chats');

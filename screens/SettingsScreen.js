@@ -15,8 +15,6 @@ const SettingsScreen = ({ navigation }) => {
     const { dispatch } = useAuthContext();
 
     const { user } = useAuthContext();
-    const userId = user.email;
-    console.log('settings screen user:', userId);
 
     useEffect(() => {
         getUserData().then(r => console.log('r:', r));
