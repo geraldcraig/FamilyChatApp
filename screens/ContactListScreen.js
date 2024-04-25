@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {addDoc, collection, onSnapshot} from "firebase/firestore";
-import {useAuthContext} from "../hooks/useAuthContext";
-import {db} from "../firebaseConfig";
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 
-const ContactListScreen = ({navigation}) => {
+const ContactListScreen = ({ navigation }) => {
     const [userData, setUserData] = useState([]);
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
     const userId = user.uid;
     console.log('contact list screen user:', userId + ' email: ' + user.email);
 
@@ -18,7 +18,7 @@ const ContactListScreen = ({navigation}) => {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
+                results.push({ id: doc.id, ...doc.data() })
             });
             const filteredResults = results.filter((result) => result.id !== userId);
             filteredResults.forEach((result) => console.log('result:', result.firstName + ' ' + result.lastName));
@@ -42,7 +42,7 @@ const ContactListScreen = ({navigation}) => {
     //     }));
     //     };
 
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
         <Pressable
             style={styles.chatContainer}
             onPress={() => {

@@ -68,10 +68,10 @@ const SettingsScreen = ({ navigation }) => {
                 console.log('user signed out')
                 navigation.replace('Sign In');
             }).catch((error) => {
-            const errorMessage = error.message;
-            console.log('Sign out error:', errorMessage)
-            console.log('error:', error.message);
-        });
+                const errorMessage = error.message;
+                console.log('Sign out error:', errorMessage)
+                console.log('error:', error.message);
+            });
     };
 
     return (

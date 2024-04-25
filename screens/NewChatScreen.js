@@ -1,14 +1,13 @@
-import {useEffect, useState} from "react";
-import {FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import {Ionicons} from '@expo/vector-icons';
-import {addDoc, collection, doc, onSnapshot, setDoc} from "firebase/firestore";
-import {db} from '../firebaseConfig';
+import { useEffect, useState } from "react";
+import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import { addDoc, collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import { db } from '../firebaseConfig';
 
-const NewChatScreen = ({route, navigation}) => {
+const NewChatScreen = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const {selectedUser, currentUser, displayFirstName, displayLastName} = route.params;
-    // console.log('Selected user: ' + selectedUser + ' Current user: ' + currentUser + ' Chatroom: ' + chatRoomId + ' User 1: ' + user1 + ' User 2: ' + user2);
+    const { selectedUser, currentUser, displayFirstName, displayLastName } = route.params;
 
     const isMyMessage = () => {
         return true;
@@ -56,7 +55,7 @@ const NewChatScreen = ({route, navigation}) => {
                 style={styles.backgroundImage}>
                 <FlatList
                     data={messages}
-                    renderItem={({item}) => (<Text style={[
+                    renderItem={({ item }) => (<Text style={[
                         styles.messagesContainer,
                         {
                             backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
@@ -64,14 +63,14 @@ const NewChatScreen = ({route, navigation}) => {
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
-                    style={{padding: 10}}
+                    style={{ padding: 10 }}
                 />
             </ImageBackground>
             <View style={styles.inputContainer}>
                 <Pressable
                     style={styles.button}
                     onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black"/>
+                    <Ionicons name="add-outline" size={24} color="black" />
                 </Pressable>
                 <TextInput
                     style={styles.textBox}

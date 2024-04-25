@@ -3,16 +3,16 @@ import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from '../firebaseConfig';
-import {useAuthContext} from "../hooks/useAuthContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const ChatScreen = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const { chatRoomId } = route.params;
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
     const userId = user.uid;
     const chatRoom = chatRoomId;
-    console.log('Chat room: ' + chatRoom +  ' User: ' + userId  + ' Email: ' + user.email);
+    console.log('Chat room: ' + chatRoom + ' User: ' + userId + ' Email: ' + user.email);
 
 
     const isMyMessage = () => {
@@ -25,7 +25,7 @@ const ChatScreen = ({ route, navigation }) => {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
+                results.push({ id: doc.id, ...doc.data() })
             });
             setMessages(results);
         });
@@ -49,7 +49,7 @@ const ChatScreen = ({ route, navigation }) => {
                 style={styles.backgroundImage}>
                 <FlatList
                     data={messages}
-                    renderItem={({item}) => (<Text style={[
+                    renderItem={({ item }) => (<Text style={[
                         styles.messagesContainer,
                         {
                             backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
@@ -57,14 +57,14 @@ const ChatScreen = ({ route, navigation }) => {
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
-                    style={{padding: 10}}
+                    style={{ padding: 10 }}
                 />
             </ImageBackground>
             <View style={styles.inputContainer}>
                 <Pressable
                     style={styles.button}
                     onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black"/>
+                    <Ionicons name="add-outline" size={24} color="black" />
                 </Pressable>
                 <TextInput
                     style={styles.textBox}
@@ -75,7 +75,7 @@ const ChatScreen = ({ route, navigation }) => {
                 <Pressable
                     style={styles.button}
                     onPress={postMessage}>
-                    <Ionicons name="send-outline" size={24} color="black"/>
+                    <Ionicons name="send-outline" size={24} color="black" />
                 </Pressable>
             </View>
         </>

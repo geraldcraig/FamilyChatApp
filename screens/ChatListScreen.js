@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {collection, onSnapshot} from "firebase/firestore";
-import {db} from "../firebaseConfig";
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
-import {useAuthContext} from "../hooks/useAuthContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 
-const ChatListScreen = ({navigation}) => {
+const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
     const userId = user.email;
     console.log('chat list screen user:', userId);
 
@@ -18,20 +18,20 @@ const ChatListScreen = ({navigation}) => {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
+                results.push({ id: doc.id, ...doc.data() })
             })
             setChatRooms(results);
         });
         return () => unsubscribe();
     }, ['ref']);
 
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
         <Pressable onPress={() => navigation.navigate('ChatScreen', {
             chatRoomId: item.id,
             user1: item.user1,
             user2: item.user2
         })}
-                   style={styles.chatContainer}>
+            style={styles.chatContainer}>
             <Image
                 style={styles.image}
                 source={userImage}

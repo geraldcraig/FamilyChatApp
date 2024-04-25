@@ -118,13 +118,13 @@ export default function App() {
             //     headerBackTitle: "Chats"
             // }}
             />
-              <Stack.Screen
-                  name="NewChatScreen"
-                  component={NewChatScreen}
-                  // options={{
-                  //     headerBackTitle: "Chats"
-                  // }}
-              />
+            <Stack.Screen
+              name="NewChatScreen"
+              component={NewChatScreen}
+            // options={{
+            //     headerBackTitle: "Chats"
+            // }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthContextProvider>
