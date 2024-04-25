@@ -20,6 +20,8 @@ const ChatListScreen = ({ navigation }) => {
             querySnapshot.docs.forEach((doc) => {
                 results.push({ id: doc.id, ...doc.data() })
             })
+
+            results.sort((a, b) => b.timestamp - a.timestamp);
             setChatRooms(results);
         });
         return () => unsubscribe();

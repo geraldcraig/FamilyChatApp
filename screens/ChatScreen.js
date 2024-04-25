@@ -16,7 +16,9 @@ const ChatScreen = ({ route, navigation }) => {
 
 
     const isMyMessage = () => {
-        return true;
+        if (userId) {
+            return true;
+        }
     }
 
     useEffect(() => {
@@ -27,6 +29,8 @@ const ChatScreen = ({ route, navigation }) => {
             querySnapshot.docs.forEach((doc) => {
                 results.push({ id: doc.id, ...doc.data() })
             });
+
+            results.sort((a, b) => b.timestamp - a.timestamp);
             setMessages(results);
         });
         return () => unsubscribe();
