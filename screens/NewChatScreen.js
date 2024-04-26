@@ -1,28 +1,54 @@
-import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, doc, onSnapshot, setDoc } from "firebase/firestore";
-import { db } from '../firebaseConfig';
+import {useEffect, useState} from "react";
+import {FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Ionicons} from '@expo/vector-icons';
+import {addDoc, getDocs, collection, doc, onSnapshot, setDoc, updateDoc, getDoc} from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import {useAuthContext} from "../hooks/useAuthContext";
 
-const NewChatScreen = ({ route, navigation }) => {
+const NewChatScreen = ({route, navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { selectedUser, currentUser, displayFirstName, displayLastName } = route.params;
+    const {selectedUser, currentUser, displayFirstName, displayLastName} = route.params;
+
+    const {user} = useAuthContext();
+    const userId = user.uid;
 
     const isMyMessage = () => {
         return true;
     }
-    useEffect(() => {
-        addDoc(collection(db, 'chats'), {
-            user1: selectedUser,
-            user2: currentUser,
-            timestamp: new Date(),
-            lastMessage: "This is the last message",
-            displayFirstName: displayFirstName,
-            displayLastName: displayLastName,
 
-        }).then(r => console.log("Chat room created"));
+    useEffect(() => {
+        getAllDocs();
+        // addDoc(collection(db, 'chats'), {
+        //     user1: selectedUser,
+        //     user2: currentUser,
+        //     timestamp: new Date(),
+        //     lastMessage: "This is the last message",
+        //     displayFirstName: displayFirstName,
+        //     displayLastName: displayLastName,
+        //
+        // }).then(r => console.log("Chat room created"));
+
     }, []);
+
+
+const getAllDocs = async ()  => {
+    const querySnapshot = await getDocs(collection(db, "users", "d42rgmqp7rQ8Pmm27Gz7gZOtsKl2", "chatrooms"));
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+    });
+
+    // const docRef = doc(db, "users", "d5Nmf2DzP6N1hCI6s9VvX2XtIWg1");
+    // const docSnap = await getDoc(docRef);
+    //
+    // if (docSnap.exists()) {
+    //     console.log("Document data:", docSnap.data());
+    // } else {
+    //     // docSnap.data() will be undefined in this case
+    //     console.log("No such document!");
+    // }
+}
 
     // useEffect(() => {
     //     const ref = collection(db, 'chats', chatRoom, 'messages');
@@ -48,6 +74,13 @@ const NewChatScreen = ({ route, navigation }) => {
     //     setInput('');
     // };
 
+
+    const postMessage = async () => {
+        // await addDoc(collection(db, "users", userId, 'chatrooms'),{
+        //     chatRoomId: selectedUser
+        // })
+    }
+
     return (
         <>
             <ImageBackground
@@ -55,7 +88,7 @@ const NewChatScreen = ({ route, navigation }) => {
                 style={styles.backgroundImage}>
                 <FlatList
                     data={messages}
-                    renderItem={({ item }) => (<Text style={[
+                    renderItem={({item}) => (<Text style={[
                         styles.messagesContainer,
                         {
                             backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
@@ -63,14 +96,14 @@ const NewChatScreen = ({ route, navigation }) => {
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
-                    style={{ padding: 10 }}
+                    style={{padding: 10}}
                 />
             </ImageBackground>
             <View style={styles.inputContainer}>
                 <Pressable
                     style={styles.button}
                     onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black" />
+                    <Ionicons name="add-outline" size={24} color="black"/>
                 </Pressable>
                 <TextInput
                     style={styles.textBox}
@@ -78,11 +111,11 @@ const NewChatScreen = ({ route, navigation }) => {
                     onChangeText={setInput}
                     placeholder="Type your message here..."
                 />
-                {/*<Pressable*/}
-                {/*    style={styles.button}*/}
-                {/*    onPress={postMessage}>*/}
-                {/*    <Ionicons name="send-outline" size={24} color="black"/>*/}
-                {/*</Pressable>*/}
+                <Pressable
+                    style={styles.button}
+                    onPress={postMessage}>
+                    <Ionicons name="send-outline" size={24} color="black"/>
+                </Pressable>
             </View>
         </>
     );

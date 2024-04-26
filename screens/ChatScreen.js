@@ -14,7 +14,6 @@ const ChatScreen = ({ route, navigation }) => {
     const chatRoom = chatRoomId;
     console.log('Chat room: ' + chatRoom + ' User: ' + userId + ' Email: ' + user.email);
 
-
     const isMyMessage = () => {
         if (userId) {
             return true;
