@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import CalendarScreen from "./screens/CalendarScreen";
 import ChatListScreen from "./screens/ChatListScreen";
+import ChatList from "./screens/ChatList";
 import ChatScreen from "./screens/ChatScreen";
 import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
@@ -14,7 +15,7 @@ import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthContextProvider } from "./components/AuthContext";
 import NewChatScreen from "./screens/NewChatScreen";
 
 
@@ -57,7 +58,7 @@ function TabNavigation({ navigation }) {
       />
       <Tab.Screen
         name="Chats"
-        component={ChatListScreen}
+        component={ChatList}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />

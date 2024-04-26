@@ -3,7 +3,7 @@ import { Button, StyleSheet, TextInput, View } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../components/useAuthContext";
 
 const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');

@@ -3,7 +3,7 @@ import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from '../firebaseConfig';
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../components/useAuthContext";
 
 const ChatScreen = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebaseConfig';
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../components/useAuthContext";
 
 const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
