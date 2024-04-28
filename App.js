@@ -11,6 +11,7 @@ import ChatList from "./screens/ChatList";
 import ChatScreen from "./screens/ChatScreen";
 import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
+import GalleryScreenCopy from "./screens/GalleryScreenCopy";
 import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
@@ -31,7 +32,7 @@ function TabNavigation({ navigation }) {
     <Tab.Navigator initialRouteName="Chats">
       <Tab.Screen
         name="Gallery"
-        component={GalleryScreen}
+        component={GalleryScreenCopy}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="images-outline" size={24} color="black" />

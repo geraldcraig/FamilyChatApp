@@ -89,7 +89,7 @@ const ChatListScreen = ({ navigation }) => {
                 source={userImage}
             />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.selectedUserName}</Text>
+                <Text style={styles.userName}>{item.participants}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}
