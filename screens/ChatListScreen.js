@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -8,11 +8,14 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
+
     const { user } = useAuthContext();
+    // const userId = user.uid;
+    // console.log("chat list screen userId: ", userId);
+
+    const ref = collection(db, 'chats');
 
     useEffect(() => {
-        const ref = collection(db, 'chats');
-
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
@@ -23,7 +26,7 @@ const ChatListScreen = ({ navigation }) => {
             setChatRooms(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => navigation.navigate('ChatScreen', {

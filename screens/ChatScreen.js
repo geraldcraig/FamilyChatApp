@@ -20,9 +20,9 @@ const ChatScreen = ({ route, navigation }) => {
         }
     }
 
-    useEffect(() => {
-        const ref = collection(db, 'chats', chatRoom, 'messages');
+    const ref = collection(db, 'chats', chatRoom, 'messages');
 
+    useEffect(() => {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
@@ -33,10 +33,10 @@ const ChatScreen = ({ route, navigation }) => {
             setMessages(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const postMessage = async () => {
-        await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
+        await addDoc(collection(db, 'chat_rooms', chatRoom, 'messages'), {
             userId: userId,
             message: input,
             timestamp: new Date(),

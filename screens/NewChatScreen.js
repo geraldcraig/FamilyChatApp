@@ -76,9 +76,9 @@ const getAllDocs = async ()  => {
 
 
     const postMessage = async () => {
-        // await addDoc(collection(db, "users", userId, 'chatrooms'),{
-        //     chatRoomId: selectedUser
-        // })
+        await addDoc(collection(db, "users", userId, 'chatrooms'),{
+            chatRoomId: selectedUser
+        })
     }
 
     return (

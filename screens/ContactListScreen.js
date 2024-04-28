@@ -7,9 +7,10 @@ import userImage from "../assets/images/userImage.jpeg";
 
 const ContactListScreen = ({ navigation }) => {
     const [userData, setUserData] = useState([]);
+    const [chats, setChats] = useState([])
     const { user } = useAuthContext();
     const userId = user.uid;
-    console.log('contact list screen user:', userId + ' email: ' + user.email);
+    // console.log('contact list screen user:', userId + ' email: ' + user.email);
 
 
     useEffect(() => {
@@ -25,7 +26,7 @@ const ContactListScreen = ({ navigation }) => {
             setUserData(filteredResults);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     // const createChatRoom = async (selectedUser, currentUser, displayFirstName, displayLastName) => {
     //     await addDoc(collection(db, 'chats'), {
