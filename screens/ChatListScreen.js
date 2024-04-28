@@ -11,13 +11,9 @@ const ChatListScreen = ({ navigation }) => {
     const { user } = useAuthContext();
     const userId = user.uid;
 
-    const col = collection(db, 'chats');
-    // const _q = query(col, where(userId, 'in', ['user1', 'user2']));
-
-
     const useCollection = (c, _q) => {
+        const [chatRooms, setChatRooms] = useState([]);
 
-        // const [collection, setCollection] = useState(c);
         const q = useRef(_q).current;
 
         useEffect(() => {
@@ -37,7 +33,7 @@ const ChatListScreen = ({ navigation }) => {
             return () => unsubscribe();
         }, [c, q]);
 
-        return [chatRooms, setChatRooms];
+        return { chatRooms };
     }
 
     // let ref = collection(db, 'chats', ['user1', '==', userId]);
@@ -61,17 +57,7 @@ const ChatListScreen = ({ navigation }) => {
     //     return () => unsubscribe();
     // }, ['ref', q]);
 
-
-    // const que = query(col, where('user2', '==', userId));
-    // const { collection: chats } = useCollection('chats', where(userId, 'in', ['user1', 'user2']));
-    // const { collection: chats } = useCollection('chats', que);
-
-    // const que = query(ref, where('user1', '==', userId));
-    // const que = query(ref, where(userId, 'in', ['user1', 'user2']));
-
-    const { collection: chats } = useCollection('chats', ['user1', "==", userId]);
-    // const { collection: chats1 } = useCollection('chats', ['user2', "==", userId]);
-    // console.log('q:', q);
+    const { chatrooms: chats } = useCollection('chats', userId);
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => navigation.navigate('ChatScreen', {

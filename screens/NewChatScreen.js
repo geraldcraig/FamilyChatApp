@@ -1,28 +1,80 @@
-import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, doc, onSnapshot, setDoc } from "firebase/firestore";
-import { db } from '../firebaseConfig';
+import {useEffect, useState} from "react";
+import {FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Ionicons} from '@expo/vector-icons';
+import {addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, where, writeBatch} from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import {useAuthContext} from "../components/useAuthContext";
 
-const NewChatScreen = ({ route, navigation }) => {
+const NewChatScreen = ({route, navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { selectedUser, currentUser, displayFirstName, displayLastName } = route.params;
+    const {selectedUser, currentUser, displayFirstName, displayLastName} = route.params;
+    const { user } = useAuthContext();
+    const userId = user.uid;
 
     const isMyMessage = () => {
         return true;
     }
     useEffect(() => {
-        addDoc(collection(db, 'chats'), {
+        addChatRoom();
+    }, []);
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    useEffect(() => {
+    updateUserChat();
+    }, []);
+
+    async function addChatRoom() {
+        const docRef = await addDoc(collection(db, 'chats'), {
             user1: selectedUser,
             user2: currentUser,
             timestamp: new Date(),
             lastMessage: "This is the last message",
             displayFirstName: displayFirstName,
             displayLastName: displayLastName,
+        });
+        console.log("Chat room created with ID: ", docRef.id);
+    }
 
-        }).then(r => console.log("Chat room created"));
-    }, []);
+    async function getData() {
+        const q = query(collection(db, "cities"), where("capital", "==", true));
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        });
+    }
+
+    function updateUserChat() {
+        setDoc(doc(db, 'user_chats', userId), {
+            chatIds: [1]
+        }).then(rs => console.log('User chat added'));
+    }
+
+    async function batchWrite() {
+        // Get a new write batch
+        const batch = writeBatch(db);
+
+// // Set the value of 'NYC'
+//         const nycRef = doc(db, "cities", "NYC");
+//         batch.set(nycRef, {name: "New York"});
+//
+// Update the population of 'SF'
+        const sfRef = doc(db, "cities", "SF");
+        batch.update(sfRef, {"population": [8999]});
+
+// // Delete the city 'LA'
+//         const laRef = doc(db, "cities", "CO");
+//         batch.delete(laRef);
+
+
+// Commit the batch
+        await batch.commit();
+    }
 
     // useEffect(() => {
     //     const ref = collection(db, 'chats', chatRoom, 'messages');
@@ -55,7 +107,7 @@ const NewChatScreen = ({ route, navigation }) => {
                 style={styles.backgroundImage}>
                 <FlatList
                     data={messages}
-                    renderItem={({ item }) => (<Text style={[
+                    renderItem={({item}) => (<Text style={[
                         styles.messagesContainer,
                         {
                             backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
@@ -63,14 +115,14 @@ const NewChatScreen = ({ route, navigation }) => {
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
-                    style={{ padding: 10 }}
+                    style={{padding: 10}}
                 />
             </ImageBackground>
             <View style={styles.inputContainer}>
                 <Pressable
                     style={styles.button}
                     onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black" />
+                    <Ionicons name="add-outline" size={24} color="black"/>
                 </Pressable>
                 <TextInput
                     style={styles.textBox}

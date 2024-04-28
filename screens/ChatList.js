@@ -7,16 +7,12 @@ import {useAuthContext} from "../components/useAuthContext";
 
 
 const ChatList = ({navigation}) => {
-    // const [chatRooms, setChatRooms] = useState([]);
+    const [chatRooms, setChatRooms] = useState([]);
     const {user} = useAuthContext();
     const userId = user.uid;
 
-    const citiesRef = collection(db, "chats");
-    const q1 = query(citiesRef, where("user2", "==", userId));
-
-
-
-    // console.log("q1", q1);
+    const chatRef = collection(db, "chats");
+    const q1 = query(chatRef, where("user2", "==", userId));
 
     useEffect(() => {
         getAllChats().then(r => console.log('hello'));
@@ -25,13 +21,18 @@ const ChatList = ({navigation}) => {
     const getAllChats = async () => {
 
         try {
-
+            // const querySnapshot = await getDocs(q1);
+            // querySnapshot.forEach((doc) => {
+            //     // doc.data() is never undefined for query doc snapshots
+            //     console.log(doc.id, " => ", doc.data());
+            // });
 
             const querySnapshot = await getDocs(q1);
+            let results = [];
             querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
-            });
+                results.push({ id: doc.id, ...doc.data() })
+            })
+            setChatRooms(results);
 
         } catch (e) {
             console.error("Error getting documents: ", e);
@@ -39,10 +40,33 @@ const ChatList = ({navigation}) => {
     }
 
 
+    const renderItem = ({ item }) => (
+        <Pressable onPress={() => navigation.navigate('ChatScreen', {
+            chatRoomId: item.id,
+            user1: item.user1,
+            user2: item.user2
+        })}
+                   style={styles.chatContainer}>
+            <Image
+                style={styles.image}
+                source={userImage}
+            />
+            <View style={styles.chatInfo}>
+                <Text style={styles.userName}>{item.displayFirstName} {item.displayLastName}</Text>
+                <Text style={styles.lastMessage}>{item.lastMessage}</Text>
+            </View>
+            {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}
+        </Pressable>
+    );
+
     return (
         <>
             <View style={styles.container}>
-                <Text>Chat List</Text>
+                <FlatList
+                    data={chatRooms}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderItem}
+                />
             </View>
         </>
     )
