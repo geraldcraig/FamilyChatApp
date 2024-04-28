@@ -1,13 +1,25 @@
 import {useEffect, useState} from "react";
-import {FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Button, FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {Ionicons} from '@expo/vector-icons';
-import {addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, where, writeBatch} from "firebase/firestore";
+import {
+    addDoc, arrayUnion,
+    collection,
+    doc,
+    getDocs,
+    onSnapshot,
+    query,
+    setDoc,
+    updateDoc,
+    where,
+    writeBatch
+} from "firebase/firestore";
 import {db} from '../firebaseConfig';
 import {useAuthContext} from "../components/useAuthContext";
 
 const NewChatScreen = ({route, navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const [chatRoomId, setChatRoomId] = useState('')
     const {selectedUser, currentUser, selectedUserFirstName, selectedUserLastName} = route.params;
     const { user } = useAuthContext();
     const userId = user.uid;
@@ -20,13 +32,13 @@ const NewChatScreen = ({route, navigation}) => {
         addChatRoom().then(r => console.log('addChatRoom'));
     }, []);
 
-    useEffect(() => {
-        getData().then(r => console.log('getData'));
-    }, []);
+    // useEffect(() => {
+    //     getData().then(r => console.log('getData'));
+    // }, []);
 
-    useEffect(() => {
-    updateUserChat();
-    }, []);
+    // useEffect(() => {
+    // updateUserChat();
+    // }, []);
 
     async function addChatRoom() {
         const docRef = await addDoc(collection(db, 'chat_rooms'), {
@@ -36,6 +48,7 @@ const NewChatScreen = ({route, navigation}) => {
             lastMessage: "This is the last message",
             selectedUserName: selectedUserName
         });
+        setChatRoomId(docRef.id);
         console.log("Chat room created with ID: ", docRef.id);
     }
 
@@ -49,10 +62,18 @@ const NewChatScreen = ({route, navigation}) => {
         });
     }
 
-    function updateUserChat() {
-        setDoc(doc(db, 'user_chats', userId), {
-            chatIds: [1]
-        }).then(rs => console.log('User chat added'));
+    // function updateUserChat() {
+    //     setDoc(doc(db, 'user_chats', userId), {
+    //         chatIds: [1]
+    //     }).then(rs => console.log('User chat added'));
+    // }
+
+    const updateUserChat = async () => {
+        const chatRef = doc(db, "users", userId);
+        await updateDoc(chatRef, {
+            chatRoomIds: arrayUnion(chatRoomId)
+        });
+        navigation.navigate("Chats");
     }
 
 //     async function batchWrite() {
@@ -102,40 +123,45 @@ const NewChatScreen = ({route, navigation}) => {
 
     return (
         <>
-            <ImageBackground
-                // source={image}
-                style={styles.backgroundImage}>
-                <FlatList
-                    data={messages}
-                    renderItem={({item}) => (<Text style={[
-                        styles.messagesContainer,
-                        {
-                            backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
-                            alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',
-                        },
-                    ]}>{item.message}</Text>)}
-                    keyExtractor={(item) => item.id}
-                    style={{padding: 10}}
-                />
-            </ImageBackground>
-            <View style={styles.inputContainer}>
-                <Pressable
-                    style={styles.button}
-                    onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black"/>
-                </Pressable>
-                <TextInput
-                    style={styles.textBox}
-                    value={input}
-                    onChangeText={setInput}
-                    placeholder="Type your message here..."
-                />
+            <View style={styles.container}>
+                <Button title="Click to create chat" onPress={updateUserChat} />
+
+            </View>
+
+            {/*<ImageBackground*/}
+            {/*    // source={image}*/}
+            {/*    style={styles.backgroundImage}>*/}
+            {/*    <FlatList*/}
+            {/*        data={messages}*/}
+            {/*        renderItem={({item}) => (<Text style={[*/}
+            {/*            styles.messagesContainer,*/}
+            {/*            {*/}
+            {/*                backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',*/}
+            {/*                alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',*/}
+            {/*            },*/}
+            {/*        ]}>{item.message}</Text>)}*/}
+            {/*        keyExtractor={(item) => item.id}*/}
+            {/*        style={{padding: 10}}*/}
+            {/*    />*/}
+            {/*</ImageBackground>*/}
+            {/*<View style={styles.inputContainer}>*/}
                 {/*<Pressable*/}
                 {/*    style={styles.button}*/}
-                {/*    onPress={postMessage}>*/}
+                {/*    onPress={() => console.log("Plus icon")}>*/}
+                {/*    <Ionicons name="add-outline" size={24} color="black"/>*/}
+                {/*</Pressable>*/}
+                {/*<TextInput*/}
+                {/*    style={styles.textBox}*/}
+                {/*    value={input}*/}
+                {/*    onChangeText={setInput}*/}
+                {/*    placeholder="Type your message here..."*/}
+                {/*/>*/}
+                {/*<Pressable*/}
+                {/*    style={styles.button}*/}
+                {/*    onPress={updateUserChat}>*/}
                 {/*    <Ionicons name="send-outline" size={24} color="black"/>*/}
                 {/*</Pressable>*/}
-            </View>
+            {/*</View>*/}
         </>
     );
 }

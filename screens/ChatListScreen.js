@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 import { useAuthContext } from "../components/useAuthContext";
@@ -11,30 +11,50 @@ const ChatListScreen = ({ navigation }) => {
     const { user } = useAuthContext();
     const userId = user.uid;
 
-    const useCollection = (c, _q) => {
-        const [chatRooms, setChatRooms] = useState([]);
+    const ref = query(collection(db, "chat_rooms"), where("participants", "array-contains", userId));
 
-        const q = useRef(_q).current;
+    useEffect(() => {
+        getAllChats().then(r => console.log('getAllChats'));
+    }, []);
 
-        useEffect(() => {
-            let ref = collection(db, c);
-
-            if (q) {
-                ref = query(ref, where(...q))
-            }
-
-            const unsubscribe = onSnapshot(ref, (querySnapshot) => {
-                let results = [];
-                querySnapshot.docs.forEach((doc) => {
-                    results.push({ id: doc.id, ...doc.data() })
-                })
-                setChatRooms(results);
+    const getAllChats = async () => {
+        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+            let results = [];
+            querySnapshot.docs.forEach((doc) => {
+                results.push({ id: doc.id, ...doc.data() })
             });
-            return () => unsubscribe();
-        }, [c, q]);
-
-        return { chatRooms };
+            setChatRooms(results);
+            results.forEach((result) => {
+                console.log("participants:", result.participants, "id:", result.id)
+            })
+        });
+        return () => unsubscribe();
     }
+
+    // const useCollection = (c, _q) => {
+    //     const [chatRooms, setChatRooms] = useState([]);
+    //
+    //     const q = useRef(_q).current;
+    //
+    //     useEffect(() => {
+    //         let ref = collection(db, c);
+    //
+    //         if (q) {
+    //             ref = query(ref, where(...q))
+    //         }
+    //
+    //         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+    //             let results = [];
+    //             querySnapshot.docs.forEach((doc) => {
+    //                 results.push({ id: doc.id, ...doc.data() })
+    //             })
+    //             setChatRooms(results);
+    //         });
+    //         return () => unsubscribe();
+    //     }, [c, q]);
+    //
+    //     return { chatRooms };
+    // }
 
     // let ref = collection(db, 'chats', ['user1', '==', userId]);
     //
@@ -57,13 +77,11 @@ const ChatListScreen = ({ navigation }) => {
     //     return () => unsubscribe();
     // }, ['ref', q]);
 
-    const { chatrooms: chats } = useCollection('chats', userId);
+    // const { chatrooms: chats } = useCollection('chats', userId);
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => navigation.navigate('ChatScreen', {
-            chatRoomId: item.id,
-            user1: item.user1,
-            user2: item.user2
+            chatRoomId: item.id
         })}
             style={styles.chatContainer}>
             <Image
@@ -71,7 +89,7 @@ const ChatListScreen = ({ navigation }) => {
                 source={userImage}
             />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.displayFirstName} {item.displayLastName}</Text>
+                <Text style={styles.userName}>{item.selectedUserName}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}

@@ -1,19 +1,28 @@
-import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
-import { db } from '../firebaseConfig';
-import { useAuthContext } from "../components/useAuthContext";
+import {useEffect, useState} from "react";
+import {
+    FlatList,
+    ImageBackground,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    View
+} from "react-native";
+import {Ionicons} from '@expo/vector-icons';
+import {addDoc, collection, onSnapshot} from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import {useAuthContext} from "../components/useAuthContext";
 
-const ChatScreen = ({ route, navigation }) => {
+const ChatScreen = ({route, navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { chatRoomId } = route.params;
-    const { user } = useAuthContext();
+    const {chatRoomId} = route.params;
+    const {user} = useAuthContext();
     const userId = user.uid;
     const chatRoom = chatRoomId;
     console.log('Chat room: ' + chatRoom + ' User: ' + userId + ' Email: ' + user.email);
-
 
     const isMyMessage = () => {
         if (userId) {
@@ -22,22 +31,22 @@ const ChatScreen = ({ route, navigation }) => {
     }
 
     useEffect(() => {
-        const ref = collection(db, 'chats', chatRoom, 'messages');
+        const ref = collection(db, 'chat_rooms', chatRoom, 'messages');
 
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({ id: doc.id, ...doc.data() })
+                results.push({id: doc.id, ...doc.data()})
             });
 
-            results.sort((a, b) => b.timestamp - a.timestamp);
+            // results.sort((a, b) => a.timestamp - b.timestamp);
             setMessages(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const postMessage = async () => {
-        await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
+        await addDoc(collection(db, 'chat_rooms', chatRoom, 'messages'), {
             userId: userId,
             message: input,
             timestamp: new Date(),
@@ -52,8 +61,9 @@ const ChatScreen = ({ route, navigation }) => {
                 // source={image}
                 style={styles.backgroundImage}>
                 <FlatList
-                    data={messages}
-                    renderItem={({ item }) => (<Text style={[
+                    // data={messages}
+                    data={messages.sort((a, b) => a.timestamp - b.timestamp)}
+                    renderItem={({item}) => (<Text style={[
                         styles.messagesContainer,
                         {
                             backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
@@ -61,7 +71,7 @@ const ChatScreen = ({ route, navigation }) => {
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
-                    style={{ padding: 10 }}
+                    style={{padding: 10}}
                 />
             </ImageBackground>
             <View style={styles.inputContainer}>

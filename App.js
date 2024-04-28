@@ -58,7 +58,7 @@ function TabNavigation({ navigation }) {
       />
       <Tab.Screen
         name="Chats"
-        component={ChatList}
+        component={ChatListScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
