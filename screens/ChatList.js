@@ -11,8 +11,10 @@ const ChatList = ({navigation}) => {
     const {user} = useAuthContext();
     const userId = user.uid;
 
-    const chatRef = collection(db, "chats");
-    const q1 = query(chatRef, where("user2", "==", userId));
+    // const chatRef = collection(db, "chats");
+    // const q1 = query(chatRef, where("user2", "==", userId));
+    const q = query(collection(db, "chat_rooms"), where("participants", "array-contains", userId));
+
 
     useEffect(() => {
         getAllChats().then(r => console.log('hello'));
@@ -27,7 +29,7 @@ const ChatList = ({navigation}) => {
             //     console.log(doc.id, " => ", doc.data());
             // });
 
-            const querySnapshot = await getDocs(q1);
+            const querySnapshot = await getDocs(q);
             let results = [];
             querySnapshot.forEach((doc) => {
                 results.push({ id: doc.id, ...doc.data() })
@@ -52,7 +54,7 @@ const ChatList = ({navigation}) => {
                 source={userImage}
             />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.displayFirstName} {item.displayLastName}</Text>
+                <Text style={styles.userName}>{item.selectedUserName}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}

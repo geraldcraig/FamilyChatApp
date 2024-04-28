@@ -182,8 +182,8 @@ const ContactListScreen = ({ navigation }) => {
                 navigation.navigate('NewChatScreen', {
                     selectedUser: item.id,
                     currentUser: userId,
-                    displayFirstName: item.firstName,
-                    displayLastName: item.lastName,
+                    selectedUserFirstName: item.firstName,
+                    selectedUserLastName: item.lastName,
                 });
             }}>
             {/*// onPress={createChatRoom}>*/}

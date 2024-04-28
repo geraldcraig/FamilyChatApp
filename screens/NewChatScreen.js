@@ -8,19 +8,20 @@ import {useAuthContext} from "../components/useAuthContext";
 const NewChatScreen = ({route, navigation}) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const {selectedUser, currentUser, displayFirstName, displayLastName} = route.params;
+    const {selectedUser, currentUser, selectedUserFirstName, selectedUserLastName} = route.params;
     const { user } = useAuthContext();
     const userId = user.uid;
+    const selectedUserName = selectedUserFirstName + " " + selectedUserLastName
 
     const isMyMessage = () => {
         return true;
     }
     useEffect(() => {
-        addChatRoom();
+        addChatRoom().then(r => console.log('addChatRoom'));
     }, []);
 
     useEffect(() => {
-        getData();
+        getData().then(r => console.log('getData'));
     }, []);
 
     useEffect(() => {
@@ -28,19 +29,18 @@ const NewChatScreen = ({route, navigation}) => {
     }, []);
 
     async function addChatRoom() {
-        const docRef = await addDoc(collection(db, 'chats'), {
-            user1: selectedUser,
-            user2: currentUser,
+        const docRef = await addDoc(collection(db, 'chat_rooms'), {
+            chatRoomId: "",
+            participants: [currentUser, selectedUser],
             timestamp: new Date(),
             lastMessage: "This is the last message",
-            displayFirstName: displayFirstName,
-            displayLastName: displayLastName,
+            selectedUserName: selectedUserName
         });
         console.log("Chat room created with ID: ", docRef.id);
     }
 
     async function getData() {
-        const q = query(collection(db, "cities"), where("capital", "==", true));
+        const q = query(collection(db, "chat_rooms"), where("participants", "array-contains", userId));
 
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
@@ -55,26 +55,26 @@ const NewChatScreen = ({route, navigation}) => {
         }).then(rs => console.log('User chat added'));
     }
 
-    async function batchWrite() {
-        // Get a new write batch
-        const batch = writeBatch(db);
-
-// // Set the value of 'NYC'
-//         const nycRef = doc(db, "cities", "NYC");
-//         batch.set(nycRef, {name: "New York"});
+//     async function batchWrite() {
+//         // Get a new write batch
+//         const batch = writeBatch(db);
 //
-// Update the population of 'SF'
-        const sfRef = doc(db, "cities", "SF");
-        batch.update(sfRef, {"population": [8999]});
-
-// // Delete the city 'LA'
-//         const laRef = doc(db, "cities", "CO");
-//         batch.delete(laRef);
-
-
-// Commit the batch
-        await batch.commit();
-    }
+// // // Set the value of 'NYC'
+// //         const nycRef = doc(db, "cities", "NYC");
+// //         batch.set(nycRef, {name: "New York"});
+// //
+// // Update the population of 'SF'
+//         const sfRef = doc(db, "cities", "SF");
+//         batch.update(sfRef, {"population": [8999]});
+//
+// // // Delete the city 'LA'
+// //         const laRef = doc(db, "cities", "CO");
+// //         batch.delete(laRef);
+//
+//
+// // Commit the batch
+//         await batch.commit();
+//     }
 
     // useEffect(() => {
     //     const ref = collection(db, 'chats', chatRoom, 'messages');
