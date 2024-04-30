@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
-import { Button, Image, View, StyleSheet } from 'react-native';
+import {Button, Image, View, StyleSheet} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import {getDownloadURL, getStorage, ref, uploadBytes, uploadString} from "firebase/storage";
+import {getDownloadURL, getStorage, listAll, ref, uploadBytes, uploadString} from "firebase/storage";
 import uuid from 'react-native-uuid';
 
 
@@ -9,7 +9,7 @@ import uuid from 'react-native-uuid';
 const storage = getStorage();
 
 // Create a storage reference from our storage service
-const storageRef = ref(storage, 'some-child');
+// const storageRef = ref(storage, 'some-child');
 
 export default function ImagePickerExample() {
     const [image, setImage] = useState(null);
@@ -34,6 +34,30 @@ export default function ImagePickerExample() {
     //     //     console.log('Uploaded a raw string!');
     //     // });
     // }, []);
+
+    useEffect(() => {
+        // Create a reference under which you want to list
+        const listRef = ref(storage, 'images');
+
+        // Find all the prefixes and items.
+        listAll(listRef)
+            .then((res) => {
+                res.prefixes.forEach((folderRef) => {
+                    // All the prefixes under listRef.
+                    // You may call listAll() recursively on them.
+                });
+                res.items.forEach((itemRef) => {
+
+                        console.log("users:", res)
+                    // All the items under listRef.
+                });
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+        });
+        // console.log('listRef', listRef.name);
+
+    }, [])
+
 
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
@@ -82,8 +106,8 @@ export default function ImagePickerExample() {
 
     return (
         <View style={styles.container}>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
-            {image && <Image source={{ uri: image }} style={styles.image} />}
+            <Button title="Pick an image from camera roll" onPress={pickImage}/>
+            {image && <Image source={{uri: image}} style={styles.image}/>}
         </View>
     );
 }
