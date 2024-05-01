@@ -1,14 +1,19 @@
-import {useCallback, useState} from "react";
-import {ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {useState} from "react";
+import {ImageBackground, StyleSheet, Text, TextInput, Pressable, View} from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 const ChatScreen = () => {
 
     const [messageText, setMessageText] = useState("");
 
-    const sendMessage = useCallback(() => {
-        setMessageText("");
-    }, [messageText]);
+    // const sendMessage = useCallback(() => {
+    //     setMessageText("");
+    // }, [messageText]);
+
+    const sendMessage = () => {
+        console.log("message: " + messageText)
+        setMessageText('')
+    }
 
     return (
         <View style={styles.container}>
@@ -20,11 +25,11 @@ const ChatScreen = () => {
             <Text>Chat Screen</Text>
 
             <View style={styles.inputContainer}>
-                <TouchableOpacity
+                <Pressable
                     style={styles.button}
                     onPress={() => console.log("Plus icon")}>
                     <Ionicons name="add-outline" size={24} color="black" />
-                </TouchableOpacity>
+                </Pressable>
 
                 <TextInput
                     style={styles.textBox}
@@ -33,11 +38,11 @@ const ChatScreen = () => {
                     onSubmitEditing={sendMessage}
                 />
 
-                <TouchableOpacity
+                <Pressable
                     style={styles.button}
-                    onPress={(sendMessage) => console.log("Send icon: " + messageText)}>
+                    onPress={sendMessage}>
                     <Ionicons name="send-outline" size={24} color="black" />
-                </TouchableOpacity>
+                </Pressable>
 
             </View>
         </View>

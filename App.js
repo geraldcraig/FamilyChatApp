@@ -6,17 +6,13 @@ import {Ionicons} from '@expo/vector-icons';
 import CalendarScreen from "./screens/CalendarScreen";
 import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
+import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
 import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import ContactsScreen from "./screens/ContactsScreen";
-import Contacts from "./screens/Contacts";
-import ContactList from "./screens/ContactList";
-import ChatList from "./screens/ChatList";
-import PhotoGrid from "./screens/PhotoGrid";
-import ImageScreen from "./screens/ImageScreen";
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,7 +26,7 @@ function TabNavigation({navigation}) {
         <Tab.Navigator initialRouteName="Chats">
             <Tab.Screen
                 name="Gallery"
-                component={ImageScreen}
+                component={GalleryScreen}
                 options={{
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="images-outline" size={24} color="black"/>
@@ -60,7 +56,7 @@ function TabNavigation({navigation}) {
 
             <Tab.Screen
                 name="Chats"
-                component={ChatList}
+                component={ChatListScreen}
                 options={{
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="chatbox-ellipses-outline" size={24} color="black"/>
@@ -91,7 +87,7 @@ function TabNavigation({navigation}) {
 }
 
 export default function App() {
-    const isSignedIn = true;
+    const isSignedIn = false;
 
     return (
         <NavigationContainer>
@@ -114,7 +110,7 @@ export default function App() {
                         />
                         <Stack.Screen
                             name="ContactList"
-                            component={ContactList}
+                            component={ContactListScreen}
                             options={{
                                 headerBackTitle: "Chats"
                             }}
