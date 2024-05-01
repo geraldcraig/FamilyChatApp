@@ -1,12 +1,20 @@
 import React from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import userImage from "../assets/images/userImage.jpeg";
-import contacts from '../assets/data/contacts.json';
 
 const ContactListScreen = ({ navigation }) => {
+    const contacts = [
+        { id: '1', name: 'John Smith', status: 'Available'},
+        { id: '2', name: 'Jane Smith', status: 'Busy'},
+        { id: '3', name: 'Bob Johnson', status: 'Offline'},
+        { id: '4', name: 'Alice Williams', status: 'Hey there'},
+        { id: '5', name: 'Robert Smith', status: 'Hey there!'},
+        { id: '6', name: 'David Jones', status: 'Hey there!'},
+        { id: '7', name: 'John Wilson', status: 'Hey there!'},
+        { id: '8', name: 'Bob Smith', status: 'Hey there!'},
+    ];
 
     const handleChatPress = (user) => {
-        // Navigate to the ChatScreen with the selected user
         navigation.navigate('ChatScreen', { user });
     };
 

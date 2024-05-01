@@ -1,10 +1,29 @@
 import React from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import userImage from "../assets/images/userImage.jpeg";
-import chats from '../assets/data/chats.json';
 
 
 const ChatListScreen = ({ navigation }) => {
+    const chats = [
+        {
+            id: '1',
+            user: { name: 'John Smith' },
+            lastMessage: "How are you doing? Did you see the match last night?",
+            timestamp: '2:30 PM',
+        },
+        {
+            id: '2',
+            user: { name: 'Jane Smith' },
+            lastMessage: "Great to catch up last weekend",
+            timestamp: 'Yesterday',
+        },
+        {
+            id: '3',
+            user: { name: 'David Jones' },
+            lastMessage: "You free for a catch soon?",
+            timestamp: 'Monday',
+        },
+    ];
 
     const handleChatPress = (user) => {
         // Navigate to the ChatScreen with the selected user

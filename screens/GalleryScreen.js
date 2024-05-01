@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
 import { useState } from "react";
@@ -17,7 +17,7 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1 }}>
-                <Text style={styles.title}>My favorite pictures</Text>
+                <Text style={styles.title}>Gallery</Text>
                 <View style={styles.body}>
                     <ScrollView>
                         {imageURIList.map((uri, i) => (
@@ -26,9 +26,7 @@ export default function App() {
                     </ScrollView>
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={styles.btn} onPress={pickImage}>
-                        <Text style={styles.btnTxt}>Add picture</Text>
-                    </TouchableOpacity>
+                    <Button title="Pick an image from camera roll" onPress={pickImage} />
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>
