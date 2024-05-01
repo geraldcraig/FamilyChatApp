@@ -25,7 +25,7 @@ const ContactListScreen = ({ navigation }) => {
             setUserData(filteredResults);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     // const createChatRoom = async (selectedUser, currentUser, displayFirstName, displayLastName) => {
     //     await addDoc(collection(db, 'chats'), {

@@ -30,7 +30,7 @@ const ChatScreen = ({ route, navigation }) => {
             setMessages(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const postMessage = async () => {
         await addDoc(collection(db, 'chats', chatRoom, 'messages'), {

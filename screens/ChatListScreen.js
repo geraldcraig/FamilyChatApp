@@ -23,7 +23,7 @@ const ChatListScreen = ({ navigation }) => {
             setChatRooms(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => navigation.navigate('ChatScreen', {
