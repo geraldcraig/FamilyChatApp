@@ -20,7 +20,7 @@ const CalendarScreen = () => {
             setEvents(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const renderItem = ({item}) => (
         <Pressable onPress={() => console.log('event added')} style={styles.chatContainer}>

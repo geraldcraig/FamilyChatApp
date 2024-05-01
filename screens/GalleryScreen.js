@@ -13,7 +13,7 @@ export default function App() {
         } else {
             setImageURIList([...imageURIList, image.assets[0].uri]);
         }
-    };
+    }
 
     return (
         <SafeAreaProvider>
