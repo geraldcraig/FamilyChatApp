@@ -3,7 +3,7 @@ import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../context/useAuthContext";
 
 
 const ChatListScreen = ({ navigation }) => {

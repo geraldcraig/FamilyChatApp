@@ -3,7 +3,7 @@ import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
 import { doc, getDoc } from "firebase/firestore";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../context/useAuthContext";
 import userImage from '../assets/images/userImage.jpeg';
 
 

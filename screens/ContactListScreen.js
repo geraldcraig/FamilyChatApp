@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../context/useAuthContext";
 import { db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 
