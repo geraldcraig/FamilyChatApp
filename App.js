@@ -30,7 +30,7 @@ function TabNavigation({navigation}) {
         <Tab.Navigator initialRouteName="Chats">
             <Tab.Screen
                 name="Gallery"
-                component={ImageScreen}
+                component={GalleryScreen}
                 options={{
                     tabBarIcon: ({color, size}) => (
                         <Ionicons name="images-outline" size={24} color="black"/>
