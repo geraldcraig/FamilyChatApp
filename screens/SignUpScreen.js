@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { child, getDatabase, ref, set } from "firebase/database";
-import { auth } from '../firebaseConfig';
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from '../firebaseConfig';
+
 
 const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
@@ -47,14 +48,17 @@ const SignUpScreen = ({ navigation }) => {
             lastName: lastName,
             email: email,
             userId: userId,
-            signUpDate: new Date().toISOString(),
+            signUpDate: new Date(),
             status: 'Hey there!'
         };
-        const dbRef = ref(getDatabase());
-        const childRef = child(dbRef, `users/${userId}`);
-        await set(childRef, userData);
+
+        const userRef = doc(db, 'users', userId);
+
+        await setDoc(userRef, userData);
+
         return userData;
     };
+
 
     return (
         <View style={styles.container}>
