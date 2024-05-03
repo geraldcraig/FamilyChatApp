@@ -1,34 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
+
 
 const ContactListScreen = ({ navigation }) => {
     const [userData, setUserData] = useState([]);
 
+    const uid = auth.currentUser.uid;
+    console.log('current user:', uid)
+    const name = auth.currentUser.displayName;
+    console.log('current user:', name);
+
+    // useEffect(() => {
+    //     getUser();
+    // }, []);
+
+    // const getUser = () => {
+    //     onAuthStateChanged(auth, (user) => {
+    //         if (user) {
+    //             const userId = user.uid;
+                
+    //             setUserId(userId);
+    //         } else {
+    //             console.log('user signed out')
+    //         }   
+    //     });
+    // }
+
     useEffect(() => {
         const ref = collection(db, 'users');
 
-        const unsubscribe= onSnapshot(ref, (querySnapshot) => {
+        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
+                results.push({ id: doc.id, ...doc.data() })
             });
+            results.forEach((result) => {
+                console.log("users:", result.id)
+            })
+            results.forEach((result) => console.log('contacts:', result.displayName));
             setUserData(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const renderItem = ({ item }) => (
-        <Pressable onPress={() => navigation.navigate('ChatScreen', {user: item.user})} style={styles.chatContainer}>
+        <Pressable
+            style={styles.chatContainer}
+            onPress={() => {
+                navigation.navigate('NewChatScreen', {
+                    selectedUser: item.id,
+                    currentUser: uid,
+                    userName: item.userName
+                });
+            }}>
+       
             <View style={styles.contactContainer}>
                 <Image
                     style={styles.image}
                     source={userImage}
                 />
                 <View style={styles.contactInfo}>
-                    <Text style={styles.contactName}>{item.firstName} {item.lastName}</Text>
+                    <Text style={styles.contactName}>{item.userName}</Text>
                     <Text style={styles.contactStatus}>{item.status}</Text>
                 </View>
             </View>
@@ -37,7 +72,9 @@ const ContactListScreen = ({ navigation }) => {
 
     return (
         <FlatList
-            data={userData}
+            data={userData.filter((result) => {
+                return result.id !== uid
+            })}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
         />

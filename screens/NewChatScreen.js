@@ -1,36 +1,71 @@
 import { useEffect, useState } from "react";
 import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
 
-const ChatScreen = ({ route, navigation }) => {
+
+const NewChatScreen = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { chatRoomId } = route.params;
-    const chatRoom = chatRoomId;
-
+    const { selectedUser, currentUser, userName } = route.params;
+    const [chatRoom, setChatRoom] = useState('')
     const uid = auth.currentUser.uid;
     console.log('current user:', uid)
     const name = auth.currentUser.displayName;
     console.log('current user:', name);
+    
+    let chatRoomId = '';
+
 
     const isMyMessage = () => {
         return true;
     }
-
     useEffect(() => {
-        const ref = collection(db, 'chat_rooms', chatRoom, 'messages');
-
-        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
-            let results = [];
-            querySnapshot.docs.forEach((doc) => {
-                results.push({ id: doc.id, ...doc.data() })
-            });
-            setMessages(results);
-        });
-        return () => unsubscribe();
+        addChatRoom();
     }, []);
+
+    async function addChatRoom() {
+        const docRef = await addDoc(collection(db, 'chat_rooms'), {
+            chatRoomId: "",
+            participants: [currentUser, selectedUser],
+            timestamp: new Date(),
+            lastMessage: "This is the last message",
+            userName: userName
+        });
+        chatRoomId = docRef.id;
+        setChatRoom(chatRoomId)
+        console.log("Chat room created with ID: ", chatRoomId);
+    }
+
+    console.log('let chat room ID:', chatRoom)
+
+    // useEffect(() => {
+    //     addMessage();
+    // }, []);
+
+    // async function addMessage() {
+    //     await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
+    //         userId: "userId",
+    //         message: "Welcome to new chat",
+    //         timestamp: new Date(),
+    //     });
+    // }
+
+    // useEffect(() => {
+    //     const ref = collection(db, 'chats', chatRoom, 'messages');
+
+    //     const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+    //         let results = [];
+    //         querySnapshot.docs.forEach((doc) => {
+    //             results.push({ id: doc.id, ...doc.data() })
+    //         });
+
+    //         results.sort((a, b) => b.timestamp - a.timestamp);
+    //         setMessages(results);
+    //     });
+    //     return () => unsubscribe();
+    // }, [messages]);
 
     const postMessage = async () => {
         await addDoc(collection(db, 'chat_rooms', chatRoom, 'messages'), {
@@ -48,7 +83,7 @@ const ChatScreen = ({ route, navigation }) => {
                 // source={image}
                 style={styles.backgroundImage}>
                 <FlatList
-                    data={messages.sort((a, b) => a.timestamp - b.timestamp)}
+                    data={messages}
                     renderItem={({ item }) => (<Text style={[
                         styles.messagesContainer,
                         {
@@ -132,4 +167,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ChatScreen;
+export default NewChatScreen;
