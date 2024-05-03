@@ -14,7 +14,8 @@ import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import { AuthContextProvider } from "./context/AuthContext";
+// import { AuthContextProvider } from "./context/AuthContext";
+import { UserProvider } from "./context/UserContext";
 import NewChatScreen from "./screens/NewChatScreen";
 
 
@@ -91,7 +92,7 @@ export default function App() {
 
   return (
     <>
-      <AuthContextProvider>
+      <UserProvider>
         <StatusBar style="auto" />
         <NavigationContainer>
           <Stack.Navigator>
@@ -127,7 +128,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </AuthContextProvider>
+      </UserProvider>
     </>
   );
 }

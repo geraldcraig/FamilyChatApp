@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button, Image, StyleSheet, TextInput, View } from "react-native";
-import { signOut } from "firebase/auth";
+import { signOut, updateProfile } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
 import { doc, getDoc } from "firebase/firestore";
-import { useAuthContext } from "../context/useAuthContext";
+// import { useAuthContext } from "../context/useAuthContext";
 import userImage from '../assets/images/userImage.jpeg';
 
 
@@ -12,11 +12,11 @@ const SettingsScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [about, setAbout] = useState('');
-    const { dispatch } = useAuthContext();
+    // const { dispatch } = useAuthContext();
 
     const { user } = useAuthContext();
-    const userId = user.email;
-    console.log('settings screen user:', userId);
+    // const currentUser = auth.currentUser;
+    // console.log('current user' + currentUser)
 
     useEffect(() => {
         getUserData().then(r => console.log('r:', r));
@@ -48,7 +48,6 @@ const SettingsScreen = ({ navigation }) => {
 
             if (userSnap.exists()) {
                 const data = userSnap.data();
-                console.log('data:', data);
                 setFirstName(data.firstName);
                 setLastName(data.lastName);
                 setEmail(data.email);
@@ -61,10 +60,19 @@ const SettingsScreen = ({ navigation }) => {
         }
     }
 
+    // updateProfile(auth.currentUser, {
+    //     displayName: currentUser,
+    //     photoURL: "1234"
+    // }).then(() => {
+    //     console.log('profile updated')
+    // }).catch((error) => {
+    //     console.log(error)
+    // });
+
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
-                dispatch({ type: 'LOGOUT' });
+                // dispatch({ type: 'LOGOUT' });
                 console.log('user signed out')
                 navigation.replace('Sign In');
             }).catch((error) => {
@@ -114,6 +122,7 @@ const SettingsScreen = ({ navigation }) => {
                 console.log("email: ", email);
                 console.log("about: ", about)
             }} />
+            {/* <Button title="Save" onPress={updateProfile} /> */}
             <Button title="Sign Out" onPress={handleSignOut} />
         </View>
     );

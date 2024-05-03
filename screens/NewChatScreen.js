@@ -3,50 +3,76 @@ import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from '../firebaseConfig';
+// import { useAuthContext } from "../context/useAuthContext";
 
 const NewChatScreen = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const { selectedUser, currentUser, displayFirstName, displayLastName } = route.params;
+    const { selectedUser, currentUser, displayName } = route.params;
+    const [chatRoom, setChatRoom] = useState('')
+    // const { user } = useAuthContext();
+    const userId = user.uid;
+    let chatRoomId = '';
+
 
     const isMyMessage = () => {
         return true;
     }
     useEffect(() => {
-        addDoc(collection(db, 'chats'), {
-            user1: selectedUser,
-            user2: currentUser,
+        addChatRoom();
+    }, []);
+
+    async function addChatRoom() {
+        const docRef = await addDoc(collection(db, 'chat_rooms'), {
+            chatRoomId: "",
+            participants: [currentUser, selectedUser],
             timestamp: new Date(),
             lastMessage: "This is the last message",
-            displayFirstName: displayFirstName,
-            displayLastName: displayLastName,
+            displayName: displayName
+        });
+        chatRoomId = docRef.id;
+        setChatRoom(chatRoomId)
+        console.log("Chat room created with ID: ", chatRoomId);
+    }
 
-        }).then(r => console.log("Chat room created"));
-    }, []);
+    console.log('let', chatRoom)
+
+    // useEffect(() => {
+    //     addMessage();
+    // }, []);
+
+    // async function addMessage() {
+    //     await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
+    //         userId: "userId",
+    //         message: "Welcome to new chat",
+    //         timestamp: new Date(),
+    //     });
+    // }
 
     // useEffect(() => {
     //     const ref = collection(db, 'chats', chatRoom, 'messages');
-    //
+
     //     const unsubscribe = onSnapshot(ref, (querySnapshot) => {
     //         let results = [];
     //         querySnapshot.docs.forEach((doc) => {
-    //             results.push({id: doc.id, ...doc.data()})
+    //             results.push({ id: doc.id, ...doc.data() })
     //         });
+
+    //         results.sort((a, b) => b.timestamp - a.timestamp);
     //         setMessages(results);
     //     });
     //     return () => unsubscribe();
-    // }, ['ref']);
-    //
-    // const postMessage = async () => {
-    //     await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
-    //         selectedUser: user1,
-    //         currentUser: user2,
-    //         message: input,
-    //         timestamp: new Date(),
-    //     });
-    //     console.log("Message posted: " + input);
-    //     setInput('');
-    // };
+    // }, [messages]);
+
+    const postMessage = async () => {
+        await addDoc(collection(db, 'chat_rooms', chatRoom, 'messages'), {
+            userId: userId,
+            message: input,
+            timestamp: new Date(),
+        });
+        console.log("Message posted: " + input);
+        setInput('');
+    };
 
     return (
         <>
@@ -78,11 +104,11 @@ const NewChatScreen = ({ route, navigation }) => {
                     onChangeText={setInput}
                     placeholder="Type your message here..."
                 />
-                {/*<Pressable*/}
-                {/*    style={styles.button}*/}
-                {/*    onPress={postMessage}>*/}
-                {/*    <Ionicons name="send-outline" size={24} color="black"/>*/}
-                {/*</Pressable>*/}
+                <Pressable
+                    style={styles.button}
+                    onPress={postMessage}>
+                    <Ionicons name="send-outline" size={24} color="black" />
+                </Pressable>
             </View>
         </>
     );

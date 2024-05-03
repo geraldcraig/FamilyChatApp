@@ -1,35 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { auth, db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
-import { useAuthContext } from "../context/useAuthContext";
+import { getAuth } from 'firebase/auth';
+// import { useAuthContext } from "../context/useAuthContext";
 
 
 const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
-    const { user } = useAuthContext();
-    const userId = user.email;
-    console.log('chat list screen user:', userId);
+    // const { user } = useAuthContext();
+    // const userId = user.uid;
+    // console.log('chat list screen user:', userId);
+    // const { user } = getAuth();
+    const userId = auth.uid;
+    console.log('uid' + userId)
+
+
+
+    // useEffect(() => {
+    //     const ref = collection(db, 'chat_rooms');
+
+    //     const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+    //         let results = [];
+    //         querySnapshot.docs.forEach((doc) => {
+    //             results.push({ id: doc.id, ...doc.data() })
+    //         })
+    //         setChatRooms(results);
+    //     });
+    //     return () => unsubscribe();
+    // }, []);
+
+    const q = query(collection(db, "chat_rooms"), where("participants", "array-contains", userId));
 
     useEffect(() => {
-        const ref = collection(db, 'chats');
+        getAllChats().then(r => console.log('hello'));
+    }, []);
 
-        const unsubscribe = onSnapshot(ref, (querySnapshot) => {
+    const getAllChats = async () => {
+
+        try {
+            // const querySnapshot = await getDocs(q1);
+            // querySnapshot.forEach((doc) => {
+            //     // doc.data() is never undefined for query doc snapshots
+            //     console.log(doc.id, " => ", doc.data());
+            // });
+
+            const querySnapshot = await getDocs(q);
             let results = [];
-            querySnapshot.docs.forEach((doc) => {
+            querySnapshot.forEach((doc) => {
                 results.push({ id: doc.id, ...doc.data() })
             })
             setChatRooms(results);
-        });
-        return () => unsubscribe();
-    }, []);
+
+        } catch (e) {
+            console.error("Error getting documents: ", e);
+        }
+    }
 
     const renderItem = ({ item }) => (
         <Pressable onPress={() => navigation.navigate('ChatScreen', {
             chatRoomId: item.id,
-            user1: item.user1,
-            user2: item.user2
+            // user1: item.user1,
+            // user2: item.user2
         })}
             style={styles.chatContainer}>
             <Image
@@ -37,7 +70,7 @@ const ChatListScreen = ({ navigation }) => {
                 source={userImage}
             />
             <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.displayFirstName} {item.displayLastName}</Text>
+                <Text style={styles.userName}>{item.displayName} {item.displayLastName}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
             {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}

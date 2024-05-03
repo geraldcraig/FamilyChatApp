@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
-import { useAuthContext } from "../context/useAuthContext";
+// import { useAuthContext } from "../context/useAuthContext";
 
 const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [displayName, setDisplayName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { dispatch } = useAuthContext();
+    // const { dispatch } = useAuthContext();
 
     // const handleSignUp = () => {
     //     createUserWithEmailAndPassword(auth, email, password)
@@ -31,9 +32,17 @@ const SignUpScreen = ({ navigation }) => {
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const { uid } = result.user;
-            dispatch({ type: 'LOGIN', payload: result.user });
+            // dispatch({ type: 'LOGIN', payload: result.user });
 
-            const userData = await createUser(firstName, lastName, email, uid);
+            const userData = await createUser(displayName, email, uid);
+
+            updateProfile(auth.currentUser, {
+                displayName: displayName, photoURL: "https://example.com/user/profile.jpg"
+              }).then(() => {
+                console.log('profile updated')
+              }).catch((error) => {
+                console.log('error occured' + error)
+              });
 
             console.log('Signed up successfully:', result);
             console.log("UserData: ", userData);
@@ -44,10 +53,11 @@ const SignUpScreen = ({ navigation }) => {
         }
     }
 
-    const createUser = async (firstName, lastName, email, userId) => {
+    const createUser = async (displayName, email, userId) => {
         const userData = {
-            firstName: firstName,
-            lastName: lastName,
+            displayName: displayName,
+            firstName: 'firstName',
+            lastName: 'lastName',
             email: email,
             userId: userId,
             signUpDate: new Date(),
@@ -63,7 +73,7 @@ const SignUpScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <TextInput
+            {/* <TextInput
                 style={styles.input}
                 placeholder="First Name"
                 onChangeText={(newText) => setFirstName(newText)}
@@ -72,8 +82,14 @@ const SignUpScreen = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Last Name"
-                onChangeText={(newText) => setLastName(newText)}
-                defaultValue={lastName}
+                onChangeText={(newText) => setFirstName(newText)}
+                defaultValue={firstName}
+            /> */}
+            <TextInput
+                style={styles.input}
+                placeholder="User Name"
+                onChangeText={(newText) => setDisplayName(newText)}
+                defaultValue={displayName}
             />
             <TextInput
                 style={styles.input}
