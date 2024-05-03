@@ -23,10 +23,10 @@ const CalendarScreen = () => {
     }, ['ref']);
 
     const renderItem = ({item}) => (
-        <Pressable onPress={() => console.log('event added')} style={styles.chatContainer}>
-            <View style={styles.chatInfo}>
-                <Text style={styles.userName}>{item.date}</Text>
-                <Text style={styles.lastMessage}>{item.event}</Text>
+        <Pressable onPress={() => console.log('event added')} style={styles.eventContainer}>
+            <View>
+                <Text>{item.date}</Text>
+                <Text>{item.event}</Text>
             </View>
             {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}
         </Pressable>
@@ -52,7 +52,7 @@ const CalendarScreen = () => {
                     renderItem={renderItem}
                 />
             </View>
-            <View style={styles.container}>
+            <View style={styles.eventContainer}>
                 <CalendarModal />
             </View>
         </View>
@@ -64,7 +64,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    eventContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+   
 });
 
 export default CalendarScreen;

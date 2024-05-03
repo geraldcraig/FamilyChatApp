@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Modal, StyleSheet, Text, TextInput, Pressable, View } from 'react-native';
 
 const CalendarModal = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [event, setEvent] = useState('');
+    const [date, setDate] = useState('');
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -15,7 +17,20 @@ const CalendarModal = () => {
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Add Event Date</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter Date"
+                            onChangeText={(newText) => setDate(newText)}
+                            defaultValue={date}
+                        />
                         <Text style={styles.modalText}>Add Event Details</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter Event"
+                            onChangeText={(newText) => setEvent(newText)}
+                            defaultValue={event}
+                        />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}>
@@ -75,6 +90,15 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
     },
+    input: {
+        height: 60,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        marginBottom: 12,
+        paddingHorizontal: 10,
+        borderRadius: 8,
+        fontSize: 16,
+    }
 });
 
 export default CalendarModal;
