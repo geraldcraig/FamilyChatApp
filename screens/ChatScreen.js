@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
 
 const ChatScreen = ({ route, navigation }) => {
@@ -15,8 +15,8 @@ const ChatScreen = ({ route, navigation }) => {
     const name = auth.currentUser.displayName;
     console.log('current user:', name);
 
-    const isMyMessage = () => {
-        return true;
+    const isMyMessage = (item) => {
+        return item.userId === uid;
     }
 
     useEffect(() => {
@@ -40,6 +40,13 @@ const ChatScreen = ({ route, navigation }) => {
         });
         console.log("Message posted: " + input);
         setInput('');
+
+        // update lastMessage in chat room doc
+        const chatroomDocRef = doc(db, "chat_rooms", chatRoom);
+
+        await updateDoc(chatroomDocRef, {
+            lastMessage: input
+        });
     };
 
     return (
@@ -52,8 +59,8 @@ const ChatScreen = ({ route, navigation }) => {
                     renderItem={({ item }) => (<Text style={[
                         styles.messagesContainer,
                         {
-                            backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
-                            alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',
+                            backgroundColor: isMyMessage(item) ? '#DCF8C5' : 'white',
+                            alignSelf: isMyMessage(item) ? 'flex-end' : 'flex-start',
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
