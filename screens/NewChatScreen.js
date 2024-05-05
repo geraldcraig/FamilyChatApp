@@ -19,8 +19,8 @@ const NewChatScreen = ({ route, navigation }) => {
     let chatRoomId = '';
 
 
-    const isMyMessage = () => {
-        return true;
+    const isMyMessage = (item) => {
+        return item.userId === uid;
     }
     useEffect(() => {
         addChatRoom();
@@ -37,28 +37,11 @@ const NewChatScreen = ({ route, navigation }) => {
         
         chatRoomId = docRef.id;
 
-        // await addDoc(collection(db, 'chats', chatRoomId, 'messages'), {
-        //     chatRoomId: "",
-
-        // });
-
         setChatRoom(chatRoomId)
         console.log("Chat room created with ID: ", chatRoomId);
     }
 
     console.log('let chat room ID:', chatRoom)
-
-    // useEffect(() => {
-    //     addMessage();
-    // }, []);
-
-    // async function addMessage() {
-    //     await addDoc(collection(db, 'chats', chatRoom, 'messages'), {
-    //         userId: "userId",
-    //         message: "Welcome to new chat",
-    //         timestamp: new Date(),
-    //     });
-    // }
 
     useEffect(() => {
         if (hasRenderedOnce.current) {
@@ -95,12 +78,12 @@ const NewChatScreen = ({ route, navigation }) => {
                 // source={image}
                 style={styles.backgroundImage}>
                 <FlatList
-                    data={messages}
+                    data={messages.sort((a, b) => a.timestamp - b.timestamp)}
                     renderItem={({ item }) => (<Text style={[
                         styles.messagesContainer,
                         {
-                            backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
-                            alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',
+                            backgroundColor: isMyMessage(item) ? '#DCF8C5' : 'white',
+                            alignSelf: isMyMessage(item) ? 'flex-end' : 'flex-start',
                         },
                     ]}>{item.message}</Text>)}
                     keyExtractor={(item) => item.id}
