@@ -7,26 +7,27 @@ import {listFiles, uploadToFirebase} from "./screens/ImageUpload";
 import {useEffect, useState} from "react";
 
 export default function App() {
-    const [permission, requestPermission] = ImagePicker.useCameraPermissions();
+    // const [permission, requestPermission] = ImagePicker.requestMediaLibraryPermissionsAsync();
     const [files, setFiles] = useState([]);
 
 
-    useEffect(() => {
-        listFiles().then((listResp) => {
-            const files = listResp.map((value) => {
-            return {name: value.fullPath}
-        });
-            setFiles(files)
-        });
-    }, []);
+    // useEffect(() => {
+    //     listFiles().then((listResp) => {
+    //         const files = listResp.map((value) => {
+    //         return {name: value.fullPath}
+    //     });
+    //         setFiles(files)
+    //     });
+    // }, []);
 
     console.log(files);
 
     const takePhoto = async () => {
         try {
-            const cameraResp = await ImagePicker.launchCameraAsync({
-                allowsEditing: true,
+            const cameraResp = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [1, 1],
                 quality: 1
             })
 
@@ -49,17 +50,17 @@ export default function App() {
         }
     };
 
-    if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
-        return (
-
-            <View style={styles.container}>
-                <Text>Permission not granted - {permission?.status}</Text>
-                <StatusBar style="auto" />
-                <Button title="Take Picture" onPress={requestPermission}></Button>
-            </View>
-
-        );
-    }
+    // if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+    //     return (
+    //
+    //         <View style={styles.container}>
+    //             <Text>Permission not granted - {permission?.status}</Text>
+    //             <StatusBar style="auto" />
+    //             <Button title="Take Picture" onPress={requestPermission}></Button>
+    //         </View>
+    //
+    //     );
+    // }
 
     return (
         <SafeAreaView style={styles.container}>
