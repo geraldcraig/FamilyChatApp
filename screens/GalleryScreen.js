@@ -1,11 +1,39 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Button, Image, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
+import { getStorage, ref, listAll } from "firebase/storage";
+
 
 
 export default function App() {
     const [imageURIList, setImageURIList] = useState([]);
+
+    useEffect(() => {
+
+
+
+    const storage = getStorage();
+    const listRef = ref(storage, 'images');
+
+// Find all the prefixes and items.
+    listAll(listRef)
+        .then((res) => {
+            res.prefixes.forEach((folderRef) => {
+                // All the prefixes under listRef.
+                // You may call listAll() recursively on them.
+            });
+            res.items.forEach((itemRef) => {
+                // All the items under listRef.
+                console.log(itemRef.root)
+            });
+        }).catch((error) => {
+        // Uh-oh, an error occurred!
+    });
+
+    }, []);
+
+
     async function pickImage() {
         const image = await launchImageLibraryAsync();
         if (image.canceled) {
