@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {Button, Image, Platform, ScrollView, StyleSheet, View} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
 import * as ImagePicker from "expo-image-picker";
-import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL} from "firebase/storage";
 
 
 export default function App() {
     const [imageURIList, setImageURIList] = useState([]);
+
+    useEffect(() => {
+        // const listRef = ref(storage, 'images');
+
+
+
+    });
 
 
     const uploadImageAsync = async (uri) => {
