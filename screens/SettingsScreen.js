@@ -3,7 +3,6 @@ import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
 import { doc, getDoc } from "firebase/firestore";
-import { useAuthContext } from "../components/useAuthContext";
 import userImage from '../assets/images/userImage.jpeg';
 
 
@@ -12,9 +11,11 @@ const SettingsScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [about, setAbout] = useState('');
-    const { dispatch } = useAuthContext();
 
-    const { user } = useAuthContext();
+    const uid = auth.currentUser.uid;
+    console.log('current user:', uid)
+    const name = auth.currentUser.displayName;
+    console.log('current user name:', name);
 
     useEffect(() => {
         getUserData().then(r => console.log('r:', r));
@@ -40,7 +41,7 @@ const SettingsScreen = ({ navigation }) => {
 
     async function getUserData() {
         try {
-            const { uid } = user;
+            // const { uid } = user;
             const userRef = doc(db, `users/${uid}`);
             const userSnap = await getDoc(userRef);
 
@@ -62,7 +63,6 @@ const SettingsScreen = ({ navigation }) => {
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
-                dispatch({ type: 'LOGOUT' });
                 console.log('user signed out')
                 navigation.replace('Sign In');
             }).catch((error) => {

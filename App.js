@@ -1,22 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from '@expo/vector-icons';
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import {Ionicons} from '@expo/vector-icons';
 
 import CalendarScreen from "./screens/CalendarScreen";
-import ChatListScreen from "./screens/ChatListScreen";
-import ChatList from "./screens/ChatList";
-import ChatScreen from "./screens/ChatScreen";
-import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
 import GroupsScreen from "./screens/GroupsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import { AuthContextProvider } from "./components/AuthContext";
-import NewChatScreen from "./screens/NewChatScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -28,7 +22,7 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigation({ navigation }) {
   return (
-    <Tab.Navigator initialRouteName="Chats">
+    <Tab.Navigator initialRouteName="Groups">
       <Tab.Screen
         name="Gallery"
         component={GalleryScreen}
@@ -57,24 +51,6 @@ function TabNavigation({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Chats"
-        component={ChatList}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
-          ),
-          headerRight: () => (
-            <Ionicons
-              onPress={() => navigation.navigate('Contacts')}
-              name="create-outline"
-              size={24}
-              color="black"
-              style={{ marginRight: 15 }}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
@@ -92,7 +68,6 @@ export default function App() {
 
   return (
     <>
-      <AuthContextProvider>
         <StatusBar style="auto" />
         <NavigationContainer>
           <Stack.Navigator>
@@ -105,30 +80,8 @@ export default function App() {
                 headerShown: false
               }}
             />
-            <Stack.Screen
-              name="ChatScreen"
-              component={ChatScreen}
-            // options={{
-            //     headerBackTitle: "Chats"
-            // }}
-            />
-            <Stack.Screen
-              name="Contacts"
-              component={ContactListScreen}
-            // options={{
-            //     headerBackTitle: "Chats"
-            // }}
-            />
-            <Stack.Screen
-              name="NewChatScreen"
-              component={NewChatScreen}
-            // options={{
-            //     headerBackTitle: "Chats"
-            // }}
-            />
           </Stack.Navigator>
         </NavigationContainer>
-      </AuthContextProvider>
     </>
   );
 }

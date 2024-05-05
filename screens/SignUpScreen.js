@@ -3,14 +3,17 @@ import { Button, StyleSheet, TextInput, View } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
-import { useAuthContext } from "../components/useAuthContext";
 
 const SignUpScreen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { dispatch } = useAuthContext();
+
+    const uid = auth.currentUser.uid;
+    console.log('current user:', uid)
+    const name = auth.currentUser.displayName;
+    console.log('current user name:', name);
 
     // const handleSignUp = () => {
     //     createUserWithEmailAndPassword(auth, email, password)
@@ -31,7 +34,6 @@ const SignUpScreen = ({ navigation }) => {
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const { uid } = result.user;
-            dispatch({ type: 'LOGIN', payload: result.user });
 
             const userData = await createUser(firstName, lastName, email, uid);
 
@@ -44,22 +46,22 @@ const SignUpScreen = ({ navigation }) => {
         }
     }
 
-    const createUser = async (firstName, lastName, email, userId) => {
-        const userData = {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            userId: userId,
-            signUpDate: new Date(),
-            status: 'Hey there!'
-        };
-
-        const userRef = doc(db, 'users', userId);
-
-        await setDoc(userRef, userData);
-
-        return userData;
-    };
+    // const createUser = async (firstName, lastName, email, userId) => {
+    //     const userData = {
+    //         firstName: firstName,
+    //         lastName: lastName,
+    //         email: email,
+    //         userId: userId,
+    //         signUpDate: new Date(),
+    //         status: 'Hey there!'
+    //     };
+    //
+    //     const userRef = doc(db, 'users', userId);
+    //
+    //     await setDoc(userRef, userData);
+    //
+    //     return userData;
+    // };
 
     return (
         <View style={styles.container}>
