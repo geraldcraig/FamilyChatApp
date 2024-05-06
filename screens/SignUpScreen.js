@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, TextInput, View } from "react-native";
+import {Alert, Button, StyleSheet, TextInput, View} from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
@@ -38,7 +38,7 @@ const SignUpScreen = ({ navigation }) => {
             }).then(() => {
                 console.log('profile updated')
             }).catch((error) => {
-                console.log('error occured', error)
+                console.log('error occurred', error)
             });
 
             console.log('Signed up successfully:', result);
@@ -46,6 +46,14 @@ const SignUpScreen = ({ navigation }) => {
             navigation.replace('Home');
         } catch (error) {
             const errorMessage = error.message;
+            Alert.alert('Error', errorMessage, [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
             console.log('Sign up error:', errorMessage)
         }
     }
