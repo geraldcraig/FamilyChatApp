@@ -106,8 +106,8 @@ const ChatListScreen = ({ navigation }) => {
         <>
             <View style={styles.container}>
                 <FlatList
-                    data={chatRooms.sort((a, b) => b.timestamp - a.timestamp)}
-                    // data={chatRooms}
+                    // data={chatRooms.sort((a, b) => b.timestamp - a.timestamp)}
+                    data={chatRooms}
                     keyExtractor={(item) => item.id}
                     renderItem={renderItem}
                 />
