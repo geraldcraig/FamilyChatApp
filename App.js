@@ -7,67 +7,44 @@ import {listFiles, uploadToFirebase} from "./screens/ImageUpload";
 import {useEffect, useState} from "react";
 
 export default function App() {
-    // const [permission, requestPermission] = ImagePicker.requestMediaLibraryPermissionsAsync();
-    const [files, setFiles] = useState([]);
-
-
-    // useEffect(() => {
-    //     listFiles().then((listResp) => {
-    //         const files = listResp.map((value) => {
-    //         return {name: value.fullPath}
-    //     });
-    //         setFiles(files)
-    //     });
-    // }, []);
-
-    console.log(files);
-
-    const takePhoto = async () => {
-        try {
-            const cameraResp = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1
-            })
-
-            if (!cameraResp.canceled) {
-                console.log(cameraResp.assets[0].uri)
-                const {uri} = cameraResp.assets[0]
-                const fileName = uri.split('/').pop();
-                const upLoadResp = await uploadToFirebase(uri, fileName);
-                console.log(upLoadResp);
-
-                listFiles().then((listResp) => {
-                    const files = listResp.map((value) => {
-                        return {name: value.fullPath}
-                    });
-                    setFiles(files);
-                });
-            }
-        } catch (error) {
-            Alert.alert("Error uploading image " + error.message);
-        }
-    };
-
-    // if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
-    //     return (
+    // const [files, setFiles] = useState([]);
     //
-    //         <View style={styles.container}>
-    //             <Text>Permission not granted - {permission?.status}</Text>
-    //             <StatusBar style="auto" />
-    //             <Button title="Take Picture" onPress={requestPermission}></Button>
-    //         </View>
+    // console.log(files);
     //
-    //     );
-    // }
+    // const takePhoto = async () => {
+    //     try {
+    //         const cameraResp = await ImagePicker.launchImageLibraryAsync({
+    //             mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //             allowsEditing: true,
+    //             aspect: [1, 1],
+    //             quality: 1
+    //         })
+    //
+    //         if (!cameraResp.canceled) {
+    //             console.log(cameraResp.assets[0].uri)
+    //             const {uri} = cameraResp.assets[0]
+    //             const fileName = uri.split('/').pop();
+    //             const upLoadResp = await uploadToFirebase(uri, fileName);
+    //             console.log(upLoadResp);
+    //
+    //             // listFiles().then((listResp) => {
+    //             //     const files = listResp.map((value) => {
+    //             //         return {name: value.fullPath}
+    //             //     });
+    //             //     setFiles(files);
+    //             // });
+    //         }
+    //     } catch (error) {
+    //         Alert.alert("Error uploading image " + error.message);
+    //     }
+    // };
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text>Working with Firebase and Image Picker</Text>
-            <Gallery files={files} />
+            {/*<Text>Working with Firebase and Image Picker</Text>*/}
+            <Gallery />
             <StatusBar style="auto" />
-            <Button title="Take Picture" onPress={takePhoto}></Button>
+            {/*<Button title="Take Picture" onPress={takePhoto}></Button>*/}
         </SafeAreaView>
     )
 }
