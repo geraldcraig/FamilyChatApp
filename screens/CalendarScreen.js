@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { FlatList, Pressable, StyleSheet, Text, View} from "react-native";
+import {FlatList, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import { Calendar } from 'react-native-calendars';
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -24,10 +24,10 @@ const CalendarScreen = () => {
 
     const renderItem = ({item}) => (
         <Pressable onPress={() => console.log('event added')} style={styles.eventContainer}>
-            <View>
+            <ScrollView>
                 <Text>{item.date}</Text>
                 <Text>{item.event}</Text>
-            </View>
+            </ScrollView>
             {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}
         </Pressable>
     );

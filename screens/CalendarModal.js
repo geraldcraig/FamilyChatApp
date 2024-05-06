@@ -1,10 +1,56 @@
 import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, TextInput, Pressable, View } from 'react-native';
+import {auth, db} from "../firebaseConfig";
+import {addDoc, collection, doc, setDoc} from "firebase/firestore";
 
 const CalendarModal = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [event, setEvent] = useState('');
     const [date, setDate] = useState('');
+    const [input, setInput] = useState('');
+
+    const uid = auth.currentUser.uid;
+    console.log('current user:', uid)
+    const name = auth.currentUser.displayName;
+    console.log('current user:', name);
+    //
+    // const handleCreateEvent = async () => {
+    //     try {
+    //         const userData = await createEvent(event, date, uid);
+    //         setModalVisible(!modalVisible)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+    //
+    // const createEvent = async (event, date, uid) => {
+    //     const userData = {
+    //         uid: uid,
+    //         event: event,
+    //         date: date
+    //     };
+    //     const userRef = doc(db, 'events', uid);
+    //
+    //     await setDoc(userRef,userData);
+    //
+    //     console.log(userData)
+    // };
+
+    const postMessage = async () => {
+        const newEventRef = doc(collection(db, "events"));
+        const data = {
+                    uid: uid,
+                    event: event,
+                    date: date
+                };
+
+        await setDoc(newEventRef, data);
+        console.log("Message posted: " + input);
+        setEvent('');
+        setDate('');
+        setModalVisible(!modalVisible)
+    };
+
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -33,7 +79,8 @@ const CalendarModal = () => {
                         />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => setModalVisible(!modalVisible)}>
+                            onPress={postMessage}>
+                            {/*onPress={() => setModalVisible(!modalVisible)}>*/}
                             <Text style={styles.textStyle}>Submit</Text>
                         </Pressable>
                     </View>
