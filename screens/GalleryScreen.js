@@ -1,38 +1,85 @@
 import {useEffect, useState} from "react";
-import { Button, Image, ScrollView, StyleSheet, View } from "react-native";
+import {Alert, Button, Image, Platform, ScrollView, StyleSheet, View} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
-import { getStorage, ref, listAll } from "firebase/storage";
+import * as ImagePicker from "expo-image-picker";
+import {ref, uploadBytes, getDownloadURL, getStorage, listAll, uploadBytesResumable} from "firebase/storage";
 
 
-
-export default function App() {
+export default function GalleryScreen() {
     const [imageURIList, setImageURIList] = useState([]);
+    const [files, setFiles] = useState([]);
+    const listFiles = async () => {
+        const storage = getStorage();
 
-    useEffect(() => {
-
-
-
-    const storage = getStorage();
-    const listRef = ref(storage, 'images');
+// Create a reference under which you want to list
+        const listRef = ref(storage, 'images');
 
 // Find all the prefixes and items.
-    listAll(listRef)
-        .then((res) => {
-            res.prefixes.forEach((folderRef) => {
-                // All the prefixes under listRef.
-                // You may call listAll() recursively on them.
-            });
-            res.items.forEach((itemRef) => {
-                // All the items under listRef.
-                console.log(itemRef.root)
-            });
-        }).catch((error) => {
-        // Uh-oh, an error occurred!
-    });
+        const listResp = await listAll(listRef);
+        return listResp.items
+    };
+    const uploadToFirebase = async (uri, name, onProgress) => {
+        const fetchResponse = await fetch(uri);
+        const theBlob = await fetchResponse.blob();
+        console.log(theBlob);
 
-    }, []);
+        const imageRef = ref(getStorage(), `images/${name}`);
 
+        const uploadTask = uploadBytesResumable(imageRef, theBlob);
+
+        return new Promise((resolve, reject) => {
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    onProgress && onProgress(progress);
+                },
+                (error) => {
+                    // Handle unsuccessful uploads
+                    reject(error)
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    resolve({
+                        downloadURL,
+                        metadata : uploadTask.snapshot.metadata
+                    })
+                    console.log('File available at', downloadURL);
+                }
+            );
+        })
+
+    }
+
+    console.log(files);
+
+    const takePhoto = async () => {
+        try {
+            const cameraResp = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1
+            })
+
+            if (!cameraResp.canceled) {
+                console.log(cameraResp.assets[0].uri)
+                const {uri} = cameraResp.assets[0]
+                const fileName = uri.split('/').pop();
+                const upLoadResp = await uploadToFirebase(uri, fileName);
+                console.log(upLoadResp);
+
+                // listFiles().then((listResp) => {
+                //     const files = listResp.map((value) => {
+                //         return {name: value.fullPath}
+                //     });
+                //     setFiles(files);
+                // });
+            }
+        } catch (error) {
+            Alert.alert("Error uploading image " + error.message);
+        }
+    };
 
     async function pickImage() {
         const image = await launchImageLibraryAsync();
@@ -48,13 +95,13 @@ export default function App() {
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.body}>
                     <ScrollView>
-                        {imageURIList.map((uri, i) => (
+                        {['https://firebasestorage.googleapis.com/v0/b/family-app-14d7b.appspot.com/o/pexels-valeriiamiller-20801061.jpg?alt=media&token=5c879d2e-a756-41b4-959a-789f5a8c09ac'].map((uri, i) => (
                             <Image style={styles.image} key={uri + i} source={{ uri }} />
                         ))}
                     </ScrollView>
                 </View>
                 <View style={styles.footer}>
-                    <Button title="Add picture" onPress={pickImage} />
+                    <Button title="Add picture" onPress={takePhoto} />
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>
