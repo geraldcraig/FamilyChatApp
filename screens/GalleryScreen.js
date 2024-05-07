@@ -42,6 +42,7 @@ export default function GalleryScreen() {
                         metadata : uploadTask.snapshot.metadata
                     })
                     console.log('File available at', downloadURL);
+                    setImageURIList([...imageURIList, downloadURL]);
                 }
             );
         })
@@ -71,21 +72,12 @@ export default function GalleryScreen() {
         }
     };
 
-    async function pickImage() {
-        const image = await launchImageLibraryAsync();
-        if (image.canceled) {
-            alert("No image selected");
-        } else {
-            setImageURIList([...imageURIList, image.assets[0].uri]);
-        }
-    }
-
     return (
         <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.body}>
                     <ScrollView>
-                        {['https://firebasestorage.googleapis.com/v0/b/family-app-14d7b.appspot.com/o/pexels-valeriiamiller-20801061.jpg?alt=media&token=5c879d2e-a756-41b4-959a-789f5a8c09ac'].map((uri, i) => (
+                        {imageURIList.map((uri, i) => (
                             <Image style={styles.image} key={uri + i} source={{ uri }} />
                         ))}
                     </ScrollView>
