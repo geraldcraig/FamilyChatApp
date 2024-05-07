@@ -28,18 +28,6 @@ const SignInScreen = ({ navigation }) => {
             });
     };
 
-    // const handleSignIn = async () => {
-    //     try {
-    //         const result = await signInWithEmailAndPassword(auth, email, password);
-    //         console.log('Signed in successfully:', result.user.uid);
-    //         navigation.replace('Home');
-    //         console.log(result);
-    //     } catch (error) {
-    //         const errorMessage = error.message;
-    //         console.log('Sign in error:', errorMessage)
-    //     }
-    // }
-
     return (
         <View style={styles.container}>
             <TextInput

@@ -11,21 +11,6 @@ const SignUpScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // const handleSignUp = () => {
-    //     createUserWithEmailAndPassword(auth, email, password)
-    //         .then(async (userCredential) => {
-    //             const user = userCredential.user;
-    //             const { uid } = userCredential.user;
-    //             const userData = await createUser(firstName, lastName, email, uid);
-    //             console.log('Signed up successfully:', user);
-    //             navigation.replace('Home');
-    //         })
-    //         .catch((error) => {
-    //             const errorMessage = error.message;
-    //             console.log('Sign up error:', errorMessage)
-    //         });
-    // };
-
     const handleSignUp = async () => {
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);

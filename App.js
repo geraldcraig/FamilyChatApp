@@ -20,10 +20,6 @@ import SignUpScreen from "./screens/SignUpScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// const getIsSignedIn = () => {
-//     return true;
-// };
-
 function TabNavigation({ navigation }) {
   return (
     <Tab.Navigator initialRouteName="Chats">
@@ -86,7 +82,6 @@ function TabNavigation({ navigation }) {
 }
 
 export default function App() {
-  // const isSignedIn = true;
 
   return (
     <>

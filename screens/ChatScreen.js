@@ -41,7 +41,6 @@ const ChatScreen = ({ route, navigation }) => {
         console.log("Message posted: " + input);
         setInput('');
 
-        // update lastMessage in chat room doc
         const chatroomDocRef = doc(db, "chat_rooms", chatRoom);
 
         await updateDoc(chatroomDocRef, {

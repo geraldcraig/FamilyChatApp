@@ -13,22 +13,6 @@ const ContactListScreen = ({ navigation }) => {
     const name = auth.currentUser.displayName;
     console.log('current user:', name);
 
-    // useEffect(() => {
-    //     getUser();
-    // }, []);
-
-    // const getUser = () => {
-    //     onAuthStateChanged(auth, (user) => {
-    //         if (user) {
-    //             const userId = user.uid;
-                
-    //             setUserId(userId);
-    //         } else {
-    //             console.log('user signed out')
-    //         }   
-    //     });
-    // }
-
     useEffect(() => {
         const ref = collection(db, 'users');
 
