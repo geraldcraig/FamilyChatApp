@@ -37,14 +37,15 @@ const ChatScreen = ({ route, navigation }) => {
             userId: uid,
             message: input,
             timestamp: new Date(),
+            displayDate: new Date().toLocaleDateString()
         });
-        console.log("Message posted: " + input);
         setInput('');
 
         const chatroomDocRef = doc(db, "chat_rooms", chatRoom);
 
         await updateDoc(chatroomDocRef, {
-            lastMessage: input
+            lastMessage: input,
+            displayDate: new Date().toLocaleDateString()
         });
     };
 

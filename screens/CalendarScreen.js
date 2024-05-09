@@ -6,7 +6,7 @@ import { db } from "../firebaseConfig";
 import CalendarModal from "./CalendarModal";
 
 
-const CalendarScreen = () => {
+const CalendarScreen = ({ navigation }) => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -25,6 +25,7 @@ const CalendarScreen = () => {
     const renderItem = ({item}) => (
         <Pressable onPress={() => console.log('event added')} style={styles.eventContainer}>
             <ScrollView>
+                <Text>{item.eventDate}</Text>
                 <Text>{item.date}</Text>
                 <Text>{item.event}</Text>
             </ScrollView>
@@ -32,10 +33,18 @@ const CalendarScreen = () => {
         </Pressable>
     );
 
+    const addDate = (day) => {
+        console.log("addDate", day.dateString)
+        navigation.navigate('CalendarEvent', {
+            newDate: day.dateString
+        })
+    }
+
     return (
         <View style={styles.container}>
             <Calendar
-                onDayPress={(day) => console.log('onDayPress', day) }
+                // onDayPress={(day) => console.log('onDayPress', day) }
+                onDayPress={(day) => addDate(day)}
                 onDayLongPress={(day) => console.log('onDayLongPress', day) }
                 onMonthChange={(date) => console.log('onMonthChange', date) }
                 onPressArrowLeft={(goToPreviousMonth) => {

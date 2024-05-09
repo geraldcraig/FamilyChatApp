@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
 
+import CalendarEvent from "./screens/CalendarEvent";
 import CalendarScreen from "./screens/CalendarScreen";
 import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
@@ -119,6 +120,13 @@ export default function App() {
           //     headerBackTitle: "Chats"
           // }}
           />
+            <Stack.Screen
+                name="CalendarEvent"
+                component={CalendarEvent}
+                // options={{
+                //     headerBackTitle: "Chats"
+                // }}
+            />
         </Stack.Navigator>
       </NavigationContainer>
 

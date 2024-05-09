@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Image, StyleSheet, TextInput, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth, db } from '../firebaseConfig';
-import { doc, getDoc } from "firebase/firestore";
+import {addDoc, collection, doc, getDoc, updateDoc} from "firebase/firestore";
 import userImage from '../assets/images/userImage.jpeg';
 
 const SettingsScreen = ({ navigation }) => {
@@ -50,6 +50,15 @@ const SettingsScreen = ({ navigation }) => {
             const errorMessage = error.message;
             console.log('Sign out error:', errorMessage)
             console.log('error:', error.message);
+        });
+    };
+
+    const updateProfile = async () => {
+        const userRef = doc(db, 'users', uid)
+        await updateDoc(userRef, {
+            userName: userName,
+            status: status,
+            about: about
         });
     };
 

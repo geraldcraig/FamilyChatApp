@@ -31,6 +31,7 @@ const NewChatScreen = ({ route, navigation }) => {
             chatRoomId: "",
             participants: [currentUser, selectedUser],
             timestamp: new Date(),
+            displayDate: new Date().toLocaleDateString(),
             lastMessage: "Welcome to new chat",
             userName: userName
         });

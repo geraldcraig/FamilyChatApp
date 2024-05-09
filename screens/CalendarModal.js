@@ -61,6 +61,11 @@ const CalendarModal = () => {
                             onPress={newEvent}>
                             <Text style={styles.textStyle}>Submit</Text>
                         </Pressable>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={newEvent}>
+                            <Text style={styles.textStyle}>Cancel</Text>
+                        </Pressable>
                     </View>
                 </View>
             </Modal>

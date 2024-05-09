@@ -84,7 +84,7 @@ const ChatListScreen = ({ navigation }) => {
                 <Text style={styles.userName}>{getChatRecipient(item)}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
-            {/* <Text style={styles.timestamp}>{item.timestamp}</Text> */}
+             <Text style={styles.timestamp}>{item.displayDate}</Text>
         </Pressable>
     );
 
