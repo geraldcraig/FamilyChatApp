@@ -4,14 +4,14 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
 import * as ImagePicker from "expo-image-picker";
 import {ref, getDownloadURL, getStorage, listAll, uploadBytesResumable} from "firebase/storage";
+import { storage } from "../firebaseConfig";
 
 
 export default function GalleryScreen() {
     const [imageURIList, setImageURIList] = useState([]);
     const [files, setFiles] = useState([]);
     const listFiles = async () => {
-        const storage = getStorage();
-
+        // const storage = getStorage();
         const listRef = ref(storage, 'images');
 
         const listResp = await listAll(listRef);

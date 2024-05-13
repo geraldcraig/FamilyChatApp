@@ -108,7 +108,7 @@ const SettingsScreen = ({ navigation }) => {
                 onChangeText={newText => setAbout(newText)}
                 defaultValue={about}
             />
-            <Button title="Save" onPress={() => console.log('update pressed')} />
+            <Button title="Save" onPress={updateProfile} />
             <Button title="Sign Out" onPress={handleSignOut} />
         </View>
     );
