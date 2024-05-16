@@ -72,7 +72,6 @@ const ChatScreen = ({ route, navigation }) => {
                 keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 90}
                 style={styles.bg}
             >
-
                 <View style={styles.inputContainer}>
                     <Pressable
                         style={styles.button}

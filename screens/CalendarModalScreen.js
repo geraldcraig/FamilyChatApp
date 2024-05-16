@@ -1,6 +1,6 @@
 import { useState } from "react";
-import {Alert, Button, StyleSheet, TextInput, View} from "react-native";
-import {addDoc, collection, doc, setDoc} from "firebase/firestore";
+import { Button, StyleSheet, TextInput, View } from "react-native";
+import { addDoc, collection } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
 
 const CalendarModalScreen = ({ route, navigation }) => {
@@ -13,13 +13,8 @@ const CalendarModalScreen = ({ route, navigation }) => {
 
 
     const addEvent = async () => {
-        // const str = new Date(newDate.timestamp).toUTCString()
-        // const date = str.substring(0, 16)
         await addDoc(collection(db, 'events'), {
             userId: uid,
-            // message: input,
-            // timestamp: new Date(),
-            // displayDate: new Date().toLocaleDateString()
             eventDate: stringDate,
             event: event,
             timestamp: new Date(newDate)
@@ -44,7 +39,7 @@ const CalendarModalScreen = ({ route, navigation }) => {
                 onChangeText={(newText) => setEvent(newText)}
                 defaultValue={event}
             />
-            <Button title="Submit" onPress={addEvent}/>
+            <Button title="Submit" onPress={addEvent} />
             <Button onPress={() => navigation.goBack()} title="Cancel" />
         </View>
     );

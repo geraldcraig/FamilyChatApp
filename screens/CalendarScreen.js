@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
-import {FlatList, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Calendar } from 'react-native-calendars';
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import CalendarModal from "./CalendarModal";
 
@@ -15,21 +15,20 @@ const CalendarScreen = ({ navigation }) => {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
             let results = [];
             querySnapshot.docs.forEach((doc) => {
-                results.push({id: doc.id, ...doc.data()})
+                results.push({ id: doc.id, ...doc.data() })
             })
             setEvents(results);
         });
         return () => unsubscribe();
     }, []);
 
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
         <Pressable onPress={() => console.log('event added')} style={styles.eventContainer}>
             <ScrollView>
                 <Text>{item.eventDate}</Text>
                 <Text>{item.date}</Text>
                 <Text>{item.event}</Text>
             </ScrollView>
-            {/*<Text style={styles.timestamp}>{item.timestamp.toDateString()}</Text>*/}
         </Pressable>
     );
 
@@ -44,10 +43,9 @@ const CalendarScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Calendar
-                // onDayPress={(day) => console.log('onDayPress', day) }
                 onDayPress={(day) => addDate(day)}
-                onDayLongPress={(day) => console.log('onDayLongPress', day) }
-                onMonthChange={(date) => console.log('onMonthChange', date) }
+                onDayLongPress={(day) => console.log('onDayLongPress', day)}
+                onMonthChange={(date) => console.log('onMonthChange', date)}
                 onPressArrowLeft={(goToPreviousMonth) => {
                     console.log('onPressArrowLeft'); goToPreviousMonth();
                 }}

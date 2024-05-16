@@ -40,7 +40,7 @@ const ContactListScreen = ({ navigation }) => {
                     userName: item.userName
                 });
             }}>
-       
+
             <View style={styles.contactContainer}>
                 <Image
                     style={styles.image}

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { collection, getDocs, onSnapshot, query, where, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import userImage from "../assets/images/userImage.jpeg";
 
 const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
-    // const [participants, setParticipants] = useState([]);
 
     const [participantsMapping, setParticipantsMapping] = useState({});
 
@@ -74,7 +73,7 @@ const ChatListScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate('ChatScreen', {
             chatRoomId: item.id,
         })}
-                   style={styles.chatContainer}>
+            style={styles.chatContainer}>
             <Image
                 style={styles.image}
                 source={userImage}

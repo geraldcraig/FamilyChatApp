@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, TextInput, Pressable, View } from 'react-native';
-import {auth, db} from "../firebaseConfig";
-import {collection, doc, setDoc} from "firebase/firestore";
+import { auth, db } from "../firebaseConfig";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 const CalendarModal = () => {
     const [modalVisible, setModalVisible] = useState(false);

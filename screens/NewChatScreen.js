@@ -1,23 +1,23 @@
 import { useEffect, useState, useRef } from "react";
 import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { addDoc, collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
 
 
-const NewChatScreen = ({ route, navigation }) => {
+const NewChatScreen = ({ route }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const { selectedUser, currentUser, userName } = route.params;
     const [chatRoom, setChatRoom] = useState('')
     const hasRenderedOnce = useRef(false);
+
     const uid = auth.currentUser.uid;
     console.log('current user:', uid)
     const name = auth.currentUser.displayName;
     console.log('current user:', name);
-    
-    let chatRoomId = '';
 
+    let chatRoomId = '';
 
     const isMyMessage = (item) => {
         return item.userId === uid;
@@ -34,7 +34,7 @@ const NewChatScreen = ({ route, navigation }) => {
             lastMessage: "Welcome to new chat",
             userName: userName
         });
-        
+
         chatRoomId = docRef.id;
 
         setChatRoom(chatRoomId)
@@ -52,7 +52,7 @@ const NewChatScreen = ({ route, navigation }) => {
                 querySnapshot.docs.forEach((doc) => {
                     results.push({ id: doc.id, ...doc.data() })
                 });
-    
+
                 results.sort((a, b) => b.timestamp - a.timestamp);
                 setMessages(results);
             });

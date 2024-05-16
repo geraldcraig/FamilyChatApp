@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Alert, Button, StyleSheet, TextInput, View} from "react-native";
+import { Alert, Button, StyleSheet, TextInput, View } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebaseConfig';
 
@@ -22,7 +22,7 @@ const SignInScreen = ({ navigation }) => {
                         onPress: () => console.log('Cancel Pressed'),
                         style: 'cancel',
                     },
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
                 ]);
                 console.log('Sign in error:', errorMessage)
             });

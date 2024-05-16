@@ -1,9 +1,8 @@
-import {useEffect, useState} from "react";
-import {Alert, Button, Image, Platform, ScrollView, StyleSheet, View} from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, Button, Image, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { launchImageLibraryAsync } from "expo-image-picker";
 import * as ImagePicker from "expo-image-picker";
-import {ref, getDownloadURL, getStorage, listAll, uploadBytesResumable} from "firebase/storage";
+import { ref, getDownloadURL, getStorage, listAll, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 
 
@@ -44,7 +43,7 @@ export default function GalleryScreen() {
                     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                     resolve({
                         downloadURL,
-                        metadata : uploadTask.snapshot.metadata
+                        metadata: uploadTask.snapshot.metadata
                     })
                     console.log('File available at', downloadURL);
                     setImageURIList([...imageURIList, downloadURL]);
@@ -67,7 +66,7 @@ export default function GalleryScreen() {
 
             if (!imageResp.canceled) {
                 console.log(imageResp.assets[0].uri)
-                const {uri} = imageResp.assets[0]
+                const { uri } = imageResp.assets[0]
                 const fileName = uri.split('/').pop();
                 const upLoadResp = await uploadToFirebase(uri, fileName);
                 console.log(upLoadResp);
@@ -95,7 +94,7 @@ export default function GalleryScreen() {
     );
 }
 
-const styles= StyleSheet.create({
+const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         paddingVertical: 10,

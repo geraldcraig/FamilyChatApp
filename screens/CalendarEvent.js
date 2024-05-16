@@ -1,7 +1,7 @@
-import {Button, StyleSheet, Text, TextInput, View} from "react-native";
-import {useState} from "react";
-import {addDoc, collection, doc, updateDoc} from "firebase/firestore";
-import {db} from "../firebaseConfig";
+import { Button, StyleSheet, TextInput } from "react-native";
+import { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const CalendarEvent = ({ route, navigation }) => {
     const [eventDate, setEventDate] = useState('')
@@ -15,10 +15,6 @@ const CalendarEvent = ({ route, navigation }) => {
 
     const addEvent = async () => {
         await addDoc(collection(db, 'events'), {
-            // userId: uid,
-            // message: input,
-            // timestamp: new Date(),
-            // displayDate: new Date().toLocaleDateString()
             eventDate: newDate,
             event: event
         });
@@ -43,8 +39,8 @@ const CalendarEvent = ({ route, navigation }) => {
                 onChangeText={(newText) => setEvent(newText)}
                 defaultValue={event}
             />
-            <Button title="Submit" onPress={addEvent}/>
-            <Button title="Go to Sign In" onPress={() => navigation.navigate('Calendar')}/>
+            <Button title="Submit" onPress={addEvent} />
+            <Button title="Go to Sign In" onPress={() => navigation.navigate('Calendar')} />
         </>
     );
 }

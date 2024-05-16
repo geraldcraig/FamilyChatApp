@@ -1,12 +1,10 @@
 import { useState } from "react";
-import {Alert, Button, StyleSheet, TextInput, View} from "react-native";
+import { Alert, Button, StyleSheet, TextInput, View } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
 
 const SignUpScreen = ({ navigation }) => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -37,7 +35,7 @@ const SignUpScreen = ({ navigation }) => {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
             ]);
             console.log('Sign up error:', errorMessage)
         }
@@ -63,18 +61,6 @@ const SignUpScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            {/* <TextInput
-                style={styles.input}
-                placeholder="First Name"
-                onChangeText={(newText) => setFirstName(newText)}
-                defaultValue={firstName}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Last Name"
-                onChangeText={(newText) => setFirstName(newText)}
-                defaultValue={firstName}
-            /> */}
             <TextInput
                 style={styles.input}
                 placeholder="User Name"
