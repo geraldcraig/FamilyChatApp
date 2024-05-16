@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, ImageBackground, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
@@ -37,14 +37,15 @@ const ChatScreen = ({ route, navigation }) => {
             userId: uid,
             message: input,
             timestamp: new Date(),
+            displayDate: new Date().toLocaleDateString()
         });
-        console.log("Message posted: " + input);
         setInput('');
 
         const chatroomDocRef = doc(db, "chat_rooms", chatRoom);
 
         await updateDoc(chatroomDocRef, {
-            lastMessage: input
+            lastMessage: input,
+            displayDate: new Date().toLocaleDateString()
         });
     };
 
@@ -66,24 +67,31 @@ const ChatScreen = ({ route, navigation }) => {
                     style={{ padding: 10 }}
                 />
             </ImageBackground>
-            <View style={styles.inputContainer}>
-                <Pressable
-                    style={styles.button}
-                    onPress={() => console.log("Plus icon")}>
-                    <Ionicons name="add-outline" size={24} color="black" />
-                </Pressable>
-                <TextInput
-                    style={styles.textBox}
-                    value={input}
-                    onChangeText={setInput}
-                    placeholder="Type your message here..."
-                />
-                <Pressable
-                    style={styles.button}
-                    onPress={postMessage}>
-                    <Ionicons name="send-outline" size={24} color="black" />
-                </Pressable>
-            </View>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 90}
+                style={styles.bg}
+            >
+
+                <View style={styles.inputContainer}>
+                    <Pressable
+                        style={styles.button}
+                        onPress={() => console.log("Plus icon")}>
+                        <Ionicons name="add-outline" size={24} color="black" />
+                    </Pressable>
+                    <TextInput
+                        style={styles.textBox}
+                        value={input}
+                        onChangeText={setInput}
+                        placeholder="Type your message here..."
+                    />
+                    <Pressable
+                        style={styles.button}
+                        onPress={postMessage}>
+                        <Ionicons name="send-outline" size={24} color="black" />
+                    </Pressable>
+                </View>
+            </KeyboardAvoidingView>
         </>
     );
 }

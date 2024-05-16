@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
 
+import CalendarEvent from "./screens/CalendarEvent";
+import CalendarModalScreen from "./screens/CalendarModalScreen";
 import CalendarScreen from "./screens/CalendarScreen";
 import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
@@ -89,6 +91,7 @@ export default function App() {
 
       <NavigationContainer>
         <Stack.Navigator>
+            <Stack.Group>
           <Stack.Screen name="Sign In" component={SignInScreen} />
           <Stack.Screen name="Sign Up" component={SignUpScreen} />
           <Stack.Screen
@@ -119,6 +122,17 @@ export default function App() {
           //     headerBackTitle: "Chats"
           // }}
           />
+            <Stack.Screen
+                name="CalendarEvent"
+                component={CalendarEvent}
+                // options={{
+                //     headerBackTitle: "Chats"
+                // }}
+            />
+        </Stack.Group>
+          <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Screen name="CalendarModal" component={CalendarModalScreen} />
+          </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
 

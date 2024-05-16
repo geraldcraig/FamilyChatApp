@@ -6,7 +6,7 @@ import { db } from "../firebaseConfig";
 import CalendarModal from "./CalendarModal";
 
 
-const CalendarScreen = () => {
+const CalendarScreen = ({ navigation }) => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -20,11 +20,12 @@ const CalendarScreen = () => {
             setEvents(results);
         });
         return () => unsubscribe();
-    }, ['ref']);
+    }, []);
 
     const renderItem = ({item}) => (
         <Pressable onPress={() => console.log('event added')} style={styles.eventContainer}>
             <ScrollView>
+                <Text>{item.eventDate}</Text>
                 <Text>{item.date}</Text>
                 <Text>{item.event}</Text>
             </ScrollView>
@@ -32,10 +33,19 @@ const CalendarScreen = () => {
         </Pressable>
     );
 
+    const addDate = (day) => {
+        const str = new Date(day.timestamp).toUTCString()
+        navigation.navigate('CalendarModal', {
+            newDate: day.dateString,
+            stringDate: str.substring(0, 16)
+        })
+    }
+
     return (
         <View style={styles.container}>
             <Calendar
-                onDayPress={(day) => console.log('onDayPress', day) }
+                // onDayPress={(day) => console.log('onDayPress', day) }
+                onDayPress={(day) => addDate(day)}
                 onDayLongPress={(day) => console.log('onDayLongPress', day) }
                 onMonthChange={(date) => console.log('onMonthChange', date) }
                 onPressArrowLeft={(goToPreviousMonth) => {
@@ -47,7 +57,7 @@ const CalendarScreen = () => {
             />
             <View style={styles.container}>
                 <FlatList
-                    data={events}
+                    data={events.sort((a, b) => a.timestamp - b.timestamp)}
                     keyExtractor={(item) => item.id}
                     renderItem={renderItem}
                 />

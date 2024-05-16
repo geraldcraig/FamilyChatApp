@@ -6,9 +6,8 @@ import userImage from "../assets/images/userImage.jpeg";
 
 const ChatListScreen = ({ navigation }) => {
     const [chatRooms, setChatRooms] = useState([]);
-    const [participants, setParticipants] = useState([]);
+    // const [participants, setParticipants] = useState([]);
 
-    // NEW - mapping between userId and userName
     const [participantsMapping, setParticipantsMapping] = useState({});
 
     const uid = auth.currentUser.uid;
@@ -84,7 +83,7 @@ const ChatListScreen = ({ navigation }) => {
                 <Text style={styles.userName}>{getChatRecipient(item)}</Text>
                 <Text style={styles.lastMessage}>{item.lastMessage}</Text>
             </View>
-            {/* <Text style={styles.timestamp}>{item.timestamp}</Text> */}
+            <Text style={styles.timestamp}>{item.displayDate}</Text>
         </Pressable>
     );
 

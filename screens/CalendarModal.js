@@ -30,6 +30,12 @@ const CalendarModal = () => {
         setModalVisible(!modalVisible)
     };
 
+    const cancelEvent = () => {
+        setEvent('');
+        setDate('');
+        setModalVisible(!modalVisible)
+    }
+
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -60,6 +66,11 @@ const CalendarModal = () => {
                             style={[styles.button, styles.buttonClose]}
                             onPress={newEvent}>
                             <Text style={styles.textStyle}>Submit</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={cancelEvent}>
+                            <Text style={styles.textStyle}>Cancel</Text>
                         </Pressable>
                     </View>
                 </View>
