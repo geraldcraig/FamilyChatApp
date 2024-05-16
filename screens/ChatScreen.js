@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, ImageBackground, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig';
@@ -67,6 +67,12 @@ const ChatScreen = ({ route, navigation }) => {
                     style={{ padding: 10 }}
                 />
             </ImageBackground>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 90}
+                style={styles.bg}
+            >
+
             <View style={styles.inputContainer}>
                 <Pressable
                     style={styles.button}
@@ -85,6 +91,7 @@ const ChatScreen = ({ route, navigation }) => {
                     <Ionicons name="send-outline" size={24} color="black" />
                 </Pressable>
             </View>
+            </KeyboardAvoidingView>
         </>
     );
 }

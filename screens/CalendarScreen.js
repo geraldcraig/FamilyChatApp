@@ -35,7 +35,7 @@ const CalendarScreen = ({ navigation }) => {
 
     const addDate = (day) => {
         console.log("addDate", day.dateString)
-        navigation.navigate('CalendarEvent', {
+        navigation.navigate('MyModal', {
             newDate: day.dateString
         })
     }

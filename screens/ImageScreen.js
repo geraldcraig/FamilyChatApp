@@ -1,15 +1,20 @@
 import {getDownloadURL, getStorage, listAll, ref} from "firebase/storage";
 import {StyleSheet} from "react-native";
+import {useEffect} from "react";
 
-const ImageScreen = async () => {
+const ImageScreen =  () => {
 // Get a reference to the storage service, which is used to create references in your storage bucket
     const storage = getStorage();
+
+    useEffect(() => {
+        getImages().then(() => console.log('images downloaded'));
+    }, []);
 
 // Create a storage reference from our storage service
 // const storageRef = ref(storage);
 
 // Create a child reference
-    const imagesRef = ref(storage, 'images');
+//     const imagesRef = ref(storage, 'images');
 // imagesRef now points to 'images'
 
     // console.log('full path:', imagesRef.fullPath);
@@ -17,14 +22,18 @@ const ImageScreen = async () => {
     // console.log('bucket:', imagesRef.bucket)
     // console.log('storage:', imagesRef.storage);
 
-    // Create a reference under which you want to list
-    const listRef = ref(storage, 'images');
+    const getImages = async () => {
 
-    // Find all the items under listRef.
-    const result = await listAll(listRef);
-    const downloadURLs = await Promise.all(result.items.map(itemRef => getDownloadURL(itemRef)));
 
-    console.log('downloadURLs', downloadURLs); // Array of download URLs
+        // Create a reference under which you want to list
+        const listRef = ref(storage, 'images');
+
+        // Find all the items under listRef.
+        const result = await listAll(listRef);
+        const downloadURLs = await Promise.all(result.items.map(itemRef => getDownloadURL(itemRef)));
+
+        console.log('downloadURLs', downloadURLs); // Array of download URLs
+    }
 
     // Find all the prefixes and items.
     // listAll(listRef)

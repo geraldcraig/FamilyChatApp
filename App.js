@@ -12,7 +12,9 @@ import ChatScreen from "./screens/ChatScreen";
 import ContactListScreen from "./screens/ContactListScreen";
 import GalleryScreen from "./screens/GalleryScreen";
 import GroupsScreen from "./screens/GroupsScreen";
+import Images from "./screens/Images";
 import ImageScreen from "./screens/ImageScreen";
+import ModalScreen from "./screens/ModalScreen";
 import NewChatScreen from "./screens/NewChatScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
@@ -52,15 +54,15 @@ function TabNavigation({ navigation }) {
           ),
         }}
       />
-        <Tab.Screen
-            name="Images"
-            component={ImageScreen}
-            options={{
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="people-outline" size={24} color="black" />
-                ),
-            }}
-        />
+        {/*<Tab.Screen*/}
+        {/*    name="Images"*/}
+        {/*    component={Images}*/}
+        {/*    options={{*/}
+        {/*        tabBarIcon: ({ color, size }) => (*/}
+        {/*            <Ionicons name="people-outline" size={24} color="black" />*/}
+        {/*        ),*/}
+        {/*    }}*/}
+        {/*/>*/}
       <Tab.Screen
         name="Chats"
         component={ChatListScreen}
@@ -100,6 +102,7 @@ export default function App() {
 
       <NavigationContainer>
         <Stack.Navigator>
+            <Stack.Group>
           <Stack.Screen name="Sign In" component={SignInScreen} />
           <Stack.Screen name="Sign Up" component={SignUpScreen} />
           <Stack.Screen
@@ -137,6 +140,10 @@ export default function App() {
                 //     headerBackTitle: "Chats"
                 // }}
             />
+            </Stack.Group>
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                <Stack.Screen name="MyModal" component={ModalScreen} />
+            </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
 

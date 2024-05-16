@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Alert, Button, Image, Platform, ScrollView, StyleSheet, View} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { launchImageLibraryAsync } from "expo-image-picker";
@@ -10,13 +10,28 @@ import { storage } from "../firebaseConfig";
 export default function GalleryScreen() {
     const [imageURIList, setImageURIList] = useState([]);
     const [files, setFiles] = useState([]);
-    const listFiles = async () => {
-        // const storage = getStorage();
-        const listRef = ref(storage, 'images');
+    // const [imageUrls, setImageUrls] = useState([]);
+    // const storage = getStorage();
 
-        const listResp = await listAll(listRef);
-        return listResp.items
-    };
+    const getImages = async () => {
+        const listRef = ref(storage, 'images');
+        const result = await listAll(listRef);
+        const downloadURLs = await Promise.all(result.items.map(itemRef => getDownloadURL(itemRef)));
+        setImageURIList(downloadURLs);
+    }
+
+    useEffect(() => {
+        getImages();
+    }, []);
+
+    // const listFiles = async () => {
+    //     // const storage = getStorage();
+    //     const listRef = ref(storage, 'images');
+    //
+    //     const listResp = await listAll(listRef);
+    //     return listResp.items
+    // };
+
     const uploadToFirebase = async (uri, name, onProgress) => {
         const fetchResponse = await fetch(uri);
         const theBlob = await fetchResponse.blob();
